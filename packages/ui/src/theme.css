@@ -1,0 +1,330 @@
+@layer theme, base, components, utilities;
+
+:root {
+  --fp-yellow: #ffd85f;
+  --fp-yellow-soft: #fff3bf;
+  --fp-gold: #b8890c;
+  --fp-ink: #303030;
+  --fp-ink-soft: #5f5b52;
+  --fp-canvas: #f5f1e8;
+  --fp-surface: rgba(255, 255, 255, 0.78);
+  --fp-line: rgba(48, 48, 48, 0.1);
+  --fp-success: #20725a;
+  --fp-danger: #b44335;
+  --fp-radius: 24px;
+  --fp-shadow: 0 20px 60px rgba(48, 48, 48, 0.09);
+  --fp-shadow-hover: 0 26px 60px rgba(48, 48, 48, 0.14);
+  --fp-focus: rgba(184, 137, 12, 0.6);
+
+  /* Motion tokens: one vocabulary for every transition in both apps. */
+  --fp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --fp-ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --fp-dur-fast: 160ms;
+  --fp-dur: 260ms;
+  --fp-dur-slow: 420ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 82% 3%, rgba(255, 216, 95, 0.28), transparent 28rem),
+    radial-gradient(circle at 4% 96%, rgba(255, 216, 95, 0.12), transparent 24rem),
+    var(--fp-canvas);
+  background-attachment: fixed;
+  color: var(--fp-ink);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/*
+ * Interaction defaults. They live in the base layer on purpose: any Tailwind utility written
+ * in a component still wins, so these only fill the gaps where nothing was specified.
+ */
+@layer base {
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+  ::selection { background: rgba(255, 216, 95, 0.65); color: var(--fp-ink); }
+  * { scrollbar-width: thin; scrollbar-color: rgba(48, 48, 48, 0.22) transparent; }
+
+  :where(a, button, [role="button"], summary) {
+    transition-property: color, background-color, border-color, box-shadow, opacity, filter, translate, scale, rotate;
+    transition-duration: var(--fp-dur-fast);
+    transition-timing-function: var(--fp-ease-out);
+  }
+  :where(button, [role="button"], summary, select, label:has(> input[type="checkbox"], > input[type="radio"])) { cursor: pointer; }
+  :where(button:disabled, select:disabled) { cursor: not-allowed; }
+
+  /* A small press-in on every button gives immediate, tactile confirmation of a tap. */
+  :where(button, [role="button"]):not(:disabled):not(.slide-commit *):active { scale: 0.97; }
+
+  :where(a, button, summary, [role="button"], [tabindex]):focus-visible {
+    outline: 3px solid var(--fp-focus);
+    outline-offset: 2px;
+  }
+
+  :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), select, textarea) {
+    transition: border-color var(--fp-dur-fast) ease, box-shadow var(--fp-dur) var(--fp-ease-out), background-color var(--fp-dur-fast) ease;
+  }
+  :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), select, textarea):hover:not(:disabled, :focus) {
+    border-color: rgba(48, 48, 48, 0.24);
+  }
+  :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), select, textarea):focus-visible {
+    outline: none;
+    border-color: var(--fp-gold);
+    box-shadow: 0 0 0 4px rgba(255, 216, 95, 0.4);
+  }
+  :where(input[type="checkbox"], input[type="radio"], input[type="range"]) { accent-color: var(--fp-ink); }
+
+  :where(tbody tr) { transition: background-color var(--fp-dur-fast) ease; }
+  :where(tbody tr:hover) { background-color: rgba(255, 216, 95, 0.12); }
+
+  :where(h1, h2) { text-wrap: balance; }
+}
+
+@layer components {
+  .fp-card {
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: var(--fp-radius);
+    background: var(--fp-surface);
+    box-shadow: var(--fp-shadow);
+    backdrop-filter: blur(18px);
+    transition: box-shadow var(--fp-dur) var(--fp-ease-out), translate var(--fp-dur) var(--fp-ease-out), border-color var(--fp-dur) ease;
+  }
+
+  /* Opt-in hover lift for anything clickable that looks like a card. */
+  .fp-lift { transition: translate var(--fp-dur) var(--fp-ease-out), box-shadow var(--fp-dur) var(--fp-ease-out), border-color var(--fp-dur) ease, background-color var(--fp-dur) ease; }
+  @media (hover: hover) and (pointer: fine) {
+    .fp-lift:hover { translate: 0 -3px; box-shadow: var(--fp-shadow-hover); border-color: rgba(184, 137, 12, 0.32); }
+  }
+
+  /* Trailing arrow that nudges forward when its link is hovered. */
+  .fp-arrow { display: inline-block; transition: translate var(--fp-dur) var(--fp-ease-out); }
+  :where(a, button):hover .fp-arrow { translate: 4px 0; }
+
+  /* Children rise in one after another. */
+  .fp-stagger > * { animation: fp-rise var(--fp-dur-slow) var(--fp-ease-out) backwards; animation-delay: calc(var(--fp-i, 8) * 45ms); }
+  .fp-stagger > :nth-child(1) { --fp-i: 0; }
+  .fp-stagger > :nth-child(2) { --fp-i: 1; }
+  .fp-stagger > :nth-child(3) { --fp-i: 2; }
+  .fp-stagger > :nth-child(4) { --fp-i: 3; }
+  .fp-stagger > :nth-child(5) { --fp-i: 4; }
+  .fp-stagger > :nth-child(6) { --fp-i: 5; }
+  .fp-stagger > :nth-child(7) { --fp-i: 6; }
+  .fp-stagger > :nth-child(8) { --fp-i: 7; }
+
+  /* Modal overlays built with role="dialog" and native <dialog> both open with a soft pop. */
+  [role="dialog"][aria-modal="true"] { animation: fp-fade var(--fp-dur) ease backwards; backdrop-filter: blur(4px); }
+  [role="dialog"][aria-modal="true"] > * { animation: fp-pop 360ms var(--fp-ease-spring) backwards; }
+  dialog[open] { animation: fp-pop 360ms var(--fp-ease-spring) backwards; }
+  dialog[open]::backdrop { animation: fp-fade var(--fp-dur) ease backwards; }
+
+  /* Errors announce themselves with a short shake; status messages slide in. */
+  [role="alert"] { animation: fp-shake 420ms var(--fp-ease-out) backwards; }
+  :where(p, div)[role="status"]:not(.fp-page-state, .fp-skeleton) { animation: fp-rise 320ms var(--fp-ease-out) backwards; }
+
+  .fp-skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(48, 48, 48, 0.07);
+  }
+  .fp-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.65) 50%, transparent 80%);
+    translate: -100% 0;
+    animation: fp-shimmer 1.3s ease-in-out infinite;
+  }
+
+  .fp-float { animation: fp-float 4.8s ease-in-out infinite; }
+}
+
+.fp-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--fp-yellow-soft);
+  color: var(--fp-ink);
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.fp-button {
+  position: relative;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 760;
+  transition: translate var(--fp-dur-fast) var(--fp-ease-out), scale var(--fp-dur-fast) var(--fp-ease-out), box-shadow var(--fp-dur) var(--fp-ease-out), background-color var(--fp-dur-fast) ease, opacity var(--fp-dur-fast) ease;
+}
+
+.fp-button:hover:not(:disabled) {
+  translate: 0 -1px;
+}
+
+.fp-button:active:not(:disabled) {
+  translate: 0 0;
+  scale: 0.97;
+}
+
+.fp-button:focus-visible {
+  outline: 3px solid rgba(255, 216, 95, 0.55);
+  outline-offset: 3px;
+}
+
+.fp-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fp-button--primary { background: var(--fp-yellow); color: var(--fp-ink); }
+.fp-button--primary:hover:not(:disabled) { box-shadow: 0 12px 28px rgba(230, 180, 30, 0.38); }
+.fp-button--secondary { background: white; color: var(--fp-ink); }
+.fp-button--secondary:hover:not(:disabled) { box-shadow: 0 10px 24px rgba(48, 48, 48, 0.1); }
+.fp-button--dark { background: var(--fp-ink); color: white; }
+.fp-button--dark:hover:not(:disabled) { background: #1f1f1f; box-shadow: 0 12px 28px rgba(48, 48, 48, 0.25); }
+.fp-button__spinner { display: inline-block; width: 16px; height: 16px; margin-right: 8px; vertical-align: -3px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: fp-feedback-spin .8s linear infinite; }
+
+.fp-feedback-button { position: relative; transition: transform 140ms ease, scale 140ms ease, background-color 180ms ease, color 180ms ease; }
+.fp-feedback-button:active:not(:disabled) { transform: scale(.97); }
+.fp-feedback-button[data-phase="success"] { background: var(--fp-success) !important; color: white !important; animation: fp-pulse-success 520ms var(--fp-ease-out); }
+.fp-feedback-button[data-phase="error"] { background: var(--fp-danger) !important; color: white !important; animation: fp-shake 420ms var(--fp-ease-out); }
+.fp-feedback-button:disabled { cursor: wait; opacity: .65; }
+.fp-feedback-spinner { display: inline-block; width: 15px; height: 15px; margin-right: 8px; vertical-align: -2px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: fp-feedback-spin .8s linear infinite; }
+.fp-feedback-check { display: inline-block; margin-right: 8px; animation: fp-pop 360ms var(--fp-ease-spring) backwards; }
+.fp-feedback-error { margin-top: 12px; color: var(--fp-danger); font-size: 14px; }
+@keyframes fp-feedback-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .fp-feedback-button { transition: none; } .fp-feedback-button:active:not(:disabled) { transform: none; } .fp-feedback-spinner { animation: none; } }
+
+.fp-page-state {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  animation: fp-rise var(--fp-dur-slow) var(--fp-ease-out) backwards;
+}
+
+/* Loading states wait a beat before showing, so fast responses never flash a placeholder. */
+.fp-page-state[data-tone="loading"] { animation-delay: 140ms; }
+.fp-page-state[data-tone="loading"] .fp-page-state__image { animation: fp-float 2.2s ease-in-out infinite; }
+.fp-page-state[data-tone="error"] .fp-page-state__image { animation: fp-tilt 620ms var(--fp-ease-out) 200ms backwards; }
+
+.fp-page-state__image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.fp-page-state h2 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: -0.02em; }
+.fp-page-state p { margin: 8px 0 0; color: var(--fp-ink-soft); line-height: 1.7; }
+
+.fp-page-state__progress {
+  position: relative;
+  height: 4px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--fp-yellow-soft);
+}
+.fp-page-state__progress::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--fp-yellow), #f2b705);
+  animation: fp-indeterminate 1.25s var(--fp-ease-out) infinite;
+}
+
+@keyframes fp-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fp-rise { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+@keyframes fp-pop { from { opacity: 0; translate: 0 14px; scale: 0.96; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes fp-shake { 0% { translate: 0 0; } 20% { translate: -6px 0; } 40% { translate: 5px 0; } 60% { translate: -3px 0; } 80% { translate: 2px 0; } 100% { translate: 0 0; } }
+@keyframes fp-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes fp-tilt { 0% { rotate: 0deg; opacity: 0; } 40% { rotate: -6deg; opacity: 1; } 70% { rotate: 3deg; } 100% { rotate: 0deg; } }
+@keyframes fp-shimmer { to { translate: 100% 0; } }
+@keyframes fp-indeterminate { 0% { translate: -110% 0; } 100% { translate: 280% 0; } }
+@keyframes fp-pulse-success { 0% { box-shadow: 0 0 0 0 rgba(32, 114, 90, 0.45); } 100% { box-shadow: 0 0 0 12px rgba(32, 114, 90, 0); } }
+
+@media (max-width: 640px) {
+  :root { --fp-radius: 18px; }
+  .fp-page-state { grid-template-columns: 1fr; text-align: center; }
+  .fp-page-state__image { margin: auto; }
+}
+
+/* Respect the system "reduce motion" setting everywhere: 示例品牌 the end state, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* =====================================================================
+ * Content-first refinement: quiet containers so the information leads.
+ * Cards are light surfaces with a hairline edge; colour and weight are
+ * reserved for numbers, statuses and the one primary action per area.
+ * ===================================================================== */
+:root {
+  --fp-edge: 1px solid rgba(48, 48, 48, 0.1);
+  --fp-soft: 0 1px 2px rgba(48, 48, 48, 0.04), 0 4px 16px rgba(48, 48, 48, 0.04);
+  --fp-soft-hover: 0 2px 4px rgba(48, 48, 48, 0.05), 0 12px 28px rgba(48, 48, 48, 0.09);
+}
+
+body {
+  background: radial-gradient(circle at 90% -10%, rgba(255, 216, 95, 0.22), transparent 30rem), var(--fp-canvas);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .fp-card {
+    border: var(--fp-edge);
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: var(--fp-soft);
+    backdrop-filter: none;
+  }
+
+  .fp-lift { transition: translate var(--fp-dur) var(--fp-ease-out), box-shadow var(--fp-dur) var(--fp-ease-out), border-color var(--fp-dur) ease, background-color var(--fp-dur) ease; }
+  @media (hover: hover) and (pointer: fine) {
+    .fp-lift:hover { translate: 0 -2px; box-shadow: var(--fp-soft-hover); border-color: rgba(48, 48, 48, 0.22); }
+  }
+
+  .fp-sticker { filter: drop-shadow(0 6px 10px rgba(48, 48, 48, 0.12)); }
+
+  /* Status chips: colour carries the meaning, the container stays small. */
+  .fp-status { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 0 10px; border-radius: 999px; background: #f2f0e9; color: var(--fp-ink); font-size: 12px; font-weight: 800; white-space: nowrap; }
+  .fp-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
+  .fp-status.is-wait { background: var(--fp-yellow-soft); color: #7a5b00; }
+  .fp-status.is-run { background: #e6f0ff; color: #1f4fa3; }
+  .fp-status.is-run::before { animation: fp-ping-dot 1.4s ease-out infinite; }
+  .fp-status.is-done { background: #e3f3ec; color: var(--fp-success); }
+}
+
+.fp-badge--danger { background: #fde4e1; color: #a52b30; }
+
+.fp-button { font-weight: 800; }
+.fp-button--primary:hover:not(:disabled) { box-shadow: 0 8px 20px rgba(230, 180, 30, 0.35); }
+.fp-button--secondary { border: var(--fp-edge); }
+
+@keyframes fp-ping-dot { 0% { box-shadow: 0 0 0 0 rgba(31, 79, 163, .45); } 80%, 100% { box-shadow: 0 0 0 6px rgba(31, 79, 163, 0); } }
+@keyframes fp-wiggle { 0%, 100% { rotate: 0deg; } 25% { rotate: -12deg; } 50% { rotate: 10deg; } 75% { rotate: -5deg; } }
+@keyframes fp-badge-pop { 0% { scale: .4; } 60% { scale: 1.25; } 100% { scale: 1; } }

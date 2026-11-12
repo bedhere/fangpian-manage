@@ -1,0 +1,122 @@
+/* Fangpian shell theme, loaded after the full original business stylesheet.
+   Metric series, risk/status colors, sticky columns and drilldown layouts stay semantic. */
+:root {
+  color-scheme: light;
+  --bg: #f8f5ee;
+  --panel: #fffefb;
+  --line: #e6e0d4;
+  --fg: #303030;
+  --muted: #706a60;
+  --primary: #846617;
+  --fp-yellow: #ffd85f;
+}
+body { font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif; }
+button, input, select, textarea { font-family: inherit; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button { transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid #b18a1c;
+  outline-offset: 3px;
+}
+button:disabled { cursor: not-allowed; }
+.member-sidebar { background: #fffdf8; border-color: var(--line); }
+.sidebar-title strong { letter-spacing: -.025em; }
+.member-nav button { border-radius: 14px; }
+.member-nav button:hover { background: #fff3cb; }
+.member-nav button.active { background: #ffe7a0; border-color: #e7c45a; color: #493d20; }
+.member-nav button.active em { color: #655220; }
+.shell { padding-top: 24px; }
+.topbar h1 { letter-spacing: -.04em; color: var(--fg); }
+.summary-card, .dimension-card, .supplementary-dashboard-card {
+  border-radius: 22px;
+  box-shadow: 0 5px 22px rgb(57 46 24 / 4%);
+}
+.summary-card.profile { background: linear-gradient(135deg, #fffefb, #fff1c8); border-color: #e8d79f; }
+.month-chip { border-color: var(--line); background: var(--panel); }
+.sync-button, .tianji-login-primary {
+  border-radius: 14px;
+  background: var(--fp-yellow);
+  color: #303030;
+  font-weight: 750;
+}
+.sync-button:hover:not(:disabled), .tianji-login-primary:hover:not(:disabled) { background: #f4c946; box-shadow: 0 3px 10px rgb(121 91 13 / 12%); }
+.supplementary-dashboard-tab { border-radius: 12px; }
+.supplementary-dashboard-tab.active, .target-split-view-tabs .supplementary-dashboard-tab.active {
+  background: #ffedb6; border-color: #dbbc64; color: #514018;
+}
+.target-management-import-button, .target-management-add-button {
+  border-radius: 10px;
+  border-color: #dccb9a;
+  background: #fff8e0;
+  color: #624c17;
+}
+.target-management-import-button:hover:not(:disabled), .target-management-add-button:hover:not(:disabled) { background: #ffedb6; }
+.chart-modal, .business-report-modal, .target-management-import-modal { border-radius: 24px; border-color: var(--line); }
+.tianji-login-page {
+  background: radial-gradient(ellipse at 15% 0%, #ffedb6 0, transparent 48%), var(--bg);
+  color: var(--fg);
+  font-family: inherit;
+}
+.tianji-login-card { border-radius: 30px; border-color: var(--line); background: var(--panel); box-shadow: 0 18px 60px rgb(57 46 24 / 8%); animation: fp-collab-enter 220ms ease-out both; }
+.tianji-login-mark { background: var(--fp-yellow); color: #303030; border-radius: 16px; }
+.tianji-login-card h1 { color: var(--fg); }
+.tianji-login-eyebrow, .tianji-login-description, .tianji-login-back, .tianji-login-scope small, .tianji-login-footnote { color: var(--muted); }
+.tianji-login-scope { border-color: #e7d69d; background: #fff7de; border-radius: 18px; }
+.tianji-login-scope span { color: #72591b; }
+@keyframes fp-collab-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 620px) {
+  .shell { width: calc(100% - 24px); padding-top: 18px; }
+  .member-sidebar { padding: 16px 12px; }
+  .topbar-actions, .head-actions { flex-wrap: wrap; }
+  .topbar h1 { font-size: 24px; }
+  .topbar-actions > *, .dimension-controls > * { max-width: 100%; }
+  .summary-card, .dimension-card, .supplementary-dashboard-card { border-radius: 18px; }
+  .tianji-login-page { padding: 16px; }
+  .tianji-login-card { padding: 26px 22px; }
+  .tianji-login-card h1 { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+.fp-collab-connection-notice { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; padding: 14px 22px; border-bottom: 1px solid #e7d69d; background: #fff3cc; color: #624c17; font-size: 13px; line-height: 1.7; }
+/* Non-metric controls with hardcoded blue in the original stylesheet. */
+.target-split-horizontal-range::-webkit-slider-runnable-track,
+.target-management-horizontal-range-bottom::-webkit-slider-runnable-track { border-color: #e0cb8c; background: #fff0bc; }
+.target-split-horizontal-range::-moz-range-track,
+.target-management-horizontal-range-bottom::-moz-range-track { border-color: #e0cb8c; background: #fff0bc; }
+.target-split-horizontal-range::-webkit-slider-thumb,
+.target-management-horizontal-range-bottom::-webkit-slider-thumb { border-color: #927022; background: #d2aa3f; }
+.target-split-horizontal-range::-moz-range-thumb,
+.target-management-horizontal-range-bottom::-moz-range-thumb { border-color: #927022; background: #d2aa3f; }
+.target-split-horizontal-range::-webkit-slider-thumb:hover,
+.target-management-horizontal-range-bottom::-webkit-slider-thumb:hover { background: #b18a28; }
+.target-split-horizontal-range::-moz-range-thumb:hover,
+.target-management-horizontal-range-bottom::-moz-range-thumb:hover { background: #b18a28; }
+.target-management-table-wrap { scrollbar-color: #b18a28 #f8f2e2; }
+.target-management-table-wrap::-webkit-scrollbar-thumb { border-color: #f8f2e2; background: #b18a28; }
+.target-split-inline-input, .target-split-inline-select,
+.target-split-total-input-label input, .target-split-toolbar-total input { border-color: #cfb776; }
+.target-split-total-input-label, .target-split-person-target-input-label { color: #72591b; }
+.target-split-editable-value:hover, .target-split-editable-value:focus-visible { border-color: #b18a28; }
+.target-management-platform-add-brand-button { border-color: #dccb9a; background: #fff8e0; color: #624c17; }
+.target-management-add-button:hover,
+.target-split-person-import-button:hover:not(:disabled),
+.target-management-platform-picker button:hover:not(:disabled),
+.target-management-brand-catalog-panel button:hover,
+.target-management-brand-catalog-panel button[aria-selected="true"] { border-color: #d0b36a; background: #ffedb6; color: #624c17; }
+.company-dashboard-name-filter-option:hover,
+.company-dashboard-name-filter-option.is-active,
+.company-dashboard-summary button:hover,
+.target-submission-column-heading button:hover,
+.target-submission-column-heading button.is-filtered { border-color: #d0b36a; background: #fff0bc; color: #624c17; }
+.target-submission-number-filter > button { color: #72591b; }
+.target-management-product-line-name-input:focus,
+.target-management-product-line-manual-actual:focus,
+.business-report-table-filter input:focus { border-color: #b18a28; outline-color: #e5c770; }
+.target-split-view-tabs .supplementary-dashboard-tab:focus-visible,
+.target-split-horizontal-range:focus-visible, .target-management-horizontal-range:focus-visible,
+.target-split-logic-heading:focus-visible, .target-split-person-import-button:focus-visible,
+.target-split-muyuan-november-summary .target-split-summary-manual-value:focus-visible,
+.target-split-inline-rationale-heading:focus-visible, .target-split-rationale-toggle:focus-visible,
+.target-management-actual-order-link:focus-visible, .target-management-table-count-link:focus-visible,
+.target-split-image-paste-zone:focus-visible, .target-submission-horizontal-scroll:focus-visible { outline-color: #b18a28; }

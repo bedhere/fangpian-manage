@@ -1,0 +1,2 @@
+export function Toast({ message, tone = 'info' }: { message: string; tone?: 'info' | 'success' | 'error' }) { return <div role="status" className={`rounded-2xl p-4 shadow-[0_12px_30px_rgba(48,48,48,.08)] ${tone === 'error' ? 'bg-red-100 text-red-900' : tone === 'success' ? 'bg-[#fff4c9]' : 'bg-[#303030] text-white'}`}>{message}</div>; }
+export function Skeleton({ label = '正在加载' }: { label?: string }) { return <div role="status" aria-label={label} className="fp-skeleton p-8"><span className="sr-only">{label}</span></div>; }

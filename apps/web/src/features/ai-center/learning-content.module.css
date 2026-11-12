@@ -1,0 +1,14 @@
+.content { overflow-wrap: anywhere; line-height: 1.8; font-size: .875rem; }
+.content p { margin: .5rem 0; white-space: pre-wrap; }
+.content h1 { margin: 1rem 0 .5rem; font-size: 1.5rem; font-weight: 900; }
+.content h2 { margin: .9rem 0 .4rem; font-size: 1.25rem; font-weight: 800; }
+.content h3 { margin: .8rem 0 .4rem; font-size: 1.1rem; font-weight: 800; }
+.content ul { list-style: disc; padding-left: 1.5rem; margin: .5rem 0; }
+.content ol { list-style: decimal; padding-left: 1.5rem; margin: .5rem 0; }
+.content li { margin: .2rem 0; }
+.content blockquote { border-left: 3px solid #d2b653; padding: .25rem 1rem; margin: .75rem 0; background: #fff9e6; color: #645b44; }
+.content a { color: #8c6b12; text-decoration: underline; text-underline-offset: 3px; }
+.content pre { background: #302d24; color: #fff8df; border-radius: .75rem; padding: 1rem; overflow-x: auto; white-space: pre-wrap; }
+.content code { font-family: monospace; background: #eee9dc; padding: .1rem .25rem; border-radius: .25rem; }
+.content pre code { background: transparent; padding: 0; }
+.content hr { border-top: 1px solid #ded7c1; margin: 1rem 0; }

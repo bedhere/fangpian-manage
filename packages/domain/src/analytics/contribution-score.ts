@@ -1,0 +1,5 @@
+type Grade='S'|'A'|'B'|'C'|'FAIL';type Level='P0'|'P1'|'P2'|'P3'|'P4';
+export type ContributionScoreWeights={projectValue:number;grade:number;projectLevel:number;contribution:number;crossDepartment:number;onTime:number;aiEfficiency:number};
+export type ContributionScoreInput={projectValue:number;grade:Grade;projectLevel:Level;contributionPercent:number;crossDepartment:boolean;onTime:boolean;aiExecutionRatio:number};
+const clamp=(value:number)=>Math.max(0,Math.min(100,value));
+export function calculateContributionScore(input:ContributionScoreInput,weights:ContributionScoreWeights){if(Object.values(weights).reduce((sum,value)=>sum+value,0)!==100)throw new Error('CONTRIBUTION_WEIGHTS_MUST_TOTAL_100');const grade={S:100,A:90,B:75,C:65,FAIL:0}[input.grade];const level={P0:100,P1:80,P2:60,P3:40,P4:20}[input.projectLevel];return Math.round((clamp(input.projectValue)*weights.projectValue+grade*weights.grade+level*weights.projectLevel+clamp(input.contributionPercent)*weights.contribution+(input.crossDepartment?100:0)*weights.crossDepartment+(input.onTime?100:0)*weights.onTime+clamp(input.aiExecutionRatio)*weights.aiEfficiency)/100);}

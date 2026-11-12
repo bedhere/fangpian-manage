@@ -1,0 +1,74 @@
+# Handoff build: self-contained dependencies stage; production Dockerfile preserved.
+FROM node:24-slim AS base
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && npm install --global pnpm@11.13.0
+WORKDIR /workspace
+
+FROM base AS dependencies
+COPY . .
+RUN pnpm install --frozen-lockfile --virtual-store-dir .pnpm
+
+RUN printf '%s\n' 'packages:' '  - "."' 'allowBuilds:' '  "@nestjs/core": true' '  esbuild: true' > apps/external-collab/pnpm-workspace.yaml && cd apps/external-collab && pnpm install --no-frozen-lockfile --node-linker=hoisted --virtual-store-dir node_modules/.pnpm
+
+FROM dependencies AS builder
+COPY . .
+ARG NEXT_PUBLIC_API_URL=http://localhost:3001
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NODE_OPTIONS=--max-old-space-size=2304
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm db:generate && pnpm exec turbo run build --concurrency=1 && pnpm --dir apps/external-collab exec tsc -p tsconfig.server.json
+
+FROM node:24-slim AS web
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=builder --chown=node:node /workspace/apps/web/.next/standalone ./
+COPY --from=builder --chown=node:node /workspace/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder --chown=node:node /workspace/apps/web/public ./apps/web/public
+USER node
+EXPOSE 3000
+HEALTHCHECK --interval=15s --timeout=3s --start-period=15s --retries=5 \
+  CMD node -e "fetch('http://localhost:3000').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+CMD ["node", "apps/web/server.js"]
+
+FROM node:24-slim AS admin
+ENV NODE_ENV=production
+ENV PORT=3002
+WORKDIR /app
+COPY --from=builder --chown=node:node /workspace/apps/admin/.next/standalone ./
+COPY --from=builder --chown=node:node /workspace/apps/admin/.next/static ./apps/admin/.next/static
+COPY --from=builder --chown=node:node /workspace/apps/admin/public ./apps/admin/public
+USER node
+EXPOSE 3002
+HEALTHCHECK --interval=15s --timeout=3s --start-period=15s --retries=5 \
+  CMD node -e "fetch('http://localhost:3002').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+CMD ["node", "apps/admin/server.js"]
+
+FROM base AS api
+ENV NODE_ENV=production
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends python3 poppler-utils util-linux \
+  && rm -rf /var/lib/apt/lists/*
+COPY --from=builder --chown=node:node /workspace /workspace
+COPY --from=builder --chown=node:node /workspace/apps/api/src/modules/trainees/growth-document.py /opt/growth-document.py
+USER node
+EXPOSE 3001
+HEALTHCHECK --interval=15s --timeout=3s --start-period=20s --retries=5 \
+  CMD node -e "fetch('http://localhost:3001/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+CMD ["node", "apps/api/dist/main.js"]
+
+FROM base AS worker
+ENV NODE_ENV=production
+COPY --from=builder --chown=node:node /workspace /workspace
+USER node
+CMD ["node", "apps/worker/dist/main.js"]
+
+FROM api AS external-collab
+WORKDIR /workspace/apps/external-collab
+ENV PORT=3003
+EXPOSE 3003
+HEALTHCHECK CMD node -e "fetch('http://localhost:3003/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+CMD ["node", "dist/main.js"]

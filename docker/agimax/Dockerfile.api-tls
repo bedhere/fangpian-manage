@@ -1,0 +1,4 @@
+FROM agimax-api:latest
+WORKDIR /workspace
+COPY --chown=node:node apps/api/src/modules/governance/governance.service.ts ./apps/api/src/modules/governance/governance.service.ts
+RUN pnpm --filter @value-flow/api build

@@ -1,0 +1,2 @@
+import { navigateParent } from '../api/client';
+export function AccountSettings({ onBack }: { onBack: () => void }) { return <section className="setting-block"><button className="btn" onClick={onBack}>返回设置</button><h3>方片账号与安全</h3><p>使用现有方片账号、示例公司有限公司资料和密码设置。</p><button className="btn primary" onClick={() => navigateParent('profile')}>示例公司有限公司资料</button><button className="btn" onClick={() => navigateParent('password')}>修改密码</button></section>; }

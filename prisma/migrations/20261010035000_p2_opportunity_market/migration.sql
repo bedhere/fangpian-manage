@@ -1,0 +1,17 @@
+CREATE TYPE "OpportunityVisibility" AS ENUM ('ORGANIZATION', 'DEPARTMENT');
+CREATE TYPE "OpportunityStatus" AS ENUM ('OPEN', 'CONVERTED', 'CLOSED');
+CREATE TYPE "OpportunityProposalStatus" AS ENUM ('PENDING', 'ACCEPTED', 'REJECTED', 'WITHDRAWN');
+CREATE TABLE "opportunities" ("id" UUID NOT NULL,"organization_id" UUID NOT NULL,"publisher_id" UUID NOT NULL,"publisher_department_id" UUID,"title" TEXT NOT NULL,"description" TEXT NOT NULL,"value_tags" TEXT[] DEFAULT ARRAY[]::TEXT[],"visibility" "OpportunityVisibility" NOT NULL DEFAULT 'ORGANIZATION',"status" "OpportunityStatus" NOT NULL DEFAULT 'OPEN',"deadline" TIMESTAMP(3),"created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updated_at" TIMESTAMP(3) NOT NULL,CONSTRAINT "opportunities_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "opportunity_follows" ("opportunity_id" UUID NOT NULL,"user_id" UUID NOT NULL,"created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,CONSTRAINT "opportunity_follows_pkey" PRIMARY KEY ("opportunity_id","user_id"));
+CREATE TABLE "opportunity_proposals" ("id" UUID NOT NULL,"opportunity_id" UUID NOT NULL,"proposer_id" UUID NOT NULL,"title" TEXT NOT NULL,"approach" TEXT NOT NULL,"expected_value" TEXT NOT NULL,"status" "OpportunityProposalStatus" NOT NULL DEFAULT 'PENDING',"created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updated_at" TIMESTAMP(3) NOT NULL,CONSTRAINT "opportunity_proposals_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "opportunity_conversions" ("id" UUID NOT NULL,"opportunity_id" UUID NOT NULL,"proposal_id" UUID NOT NULL,"business_request_id" UUID NOT NULL,"converted_by_id" UUID NOT NULL,"created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,CONSTRAINT "opportunity_conversions_pkey" PRIMARY KEY ("id"));
+CREATE INDEX "opportunities_organization_id_status_created_at_idx" ON "opportunities"("organization_id","status","created_at");
+CREATE UNIQUE INDEX "opportunity_proposals_opportunity_id_proposer_id_key" ON "opportunity_proposals"("opportunity_id","proposer_id");
+CREATE INDEX "opportunity_proposals_opportunity_id_status_idx" ON "opportunity_proposals"("opportunity_id","status");
+CREATE UNIQUE INDEX "opportunity_conversions_opportunity_id_key" ON "opportunity_conversions"("opportunity_id");
+CREATE UNIQUE INDEX "opportunity_conversions_proposal_id_key" ON "opportunity_conversions"("proposal_id");
+CREATE UNIQUE INDEX "opportunity_conversions_business_request_id_key" ON "opportunity_conversions"("business_request_id");
+ALTER TABLE "opportunity_follows" ADD CONSTRAINT "opportunity_follows_opportunity_id_fkey" FOREIGN KEY ("opportunity_id") REFERENCES "opportunities"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "opportunity_proposals" ADD CONSTRAINT "opportunity_proposals_opportunity_id_fkey" FOREIGN KEY ("opportunity_id") REFERENCES "opportunities"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "opportunity_conversions" ADD CONSTRAINT "opportunity_conversions_opportunity_id_fkey" FOREIGN KEY ("opportunity_id") REFERENCES "opportunities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "opportunity_conversions" ADD CONSTRAINT "opportunity_conversions_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "opportunity_proposals"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

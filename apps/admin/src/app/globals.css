@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--fp-canvas);
+  --color-foreground: var(--fp-ink);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body { font-family: var(--font-geist-sans), "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif; }
+@layer base {
+  a { color: inherit; text-decoration: none; }
+}
+.admin-shell { min-height: 100vh; padding: 16px; }
+.admin-shell__sidebar { position: fixed; inset: 16px auto 16px 16px; display: flex; width: 250px; flex-direction: column; padding: 24px 18px; border-radius: 28px; background: var(--fp-ink); color: white; box-shadow: var(--fp-shadow); }
+.admin-shell__logo { width: 178px; height: 46px; object-fit: contain; object-position: left center; }
+.admin-shell__title { display: grid; gap: 2px; margin: 24px 6px 16px; }
+.admin-shell__title span { font-size: 20px; font-weight: 800; }
+.admin-shell__title small { color: rgba(255,255,255,.55); }
+.admin-shell__nav { display: grid; gap: 5px; }
+.admin-shell__nav a { position: relative; padding: 12px 14px 12px 18px; border-radius: 14px; color: rgba(255,255,255,.72); font-size: 14px; font-weight: 700; transition: background-color var(--fp-dur-fast) ease, color var(--fp-dur-fast) ease, translate var(--fp-dur) var(--fp-ease-out); }
+.admin-shell__nav a::before { content: ""; position: absolute; left: 6px; top: 50%; width: 4px; height: 0; border-radius: 4px; background: var(--fp-yellow); translate: 0 -50%; transition: height var(--fp-dur) var(--fp-ease-spring); }
+.admin-shell__nav a:hover { background: rgba(255,255,255,.08); color: white; translate: 3px 0; }
+.admin-shell__nav a:hover::before { height: 14px; }
+.admin-shell__nav a[aria-current="page"] { background: var(--fp-yellow); color: var(--fp-ink); translate: 0 0; box-shadow: 0 8px 22px rgba(255,216,95,.25); }
+.admin-shell__nav a[aria-current="page"]::before { height: 0; }
+/* The sidebar stays put; only the page body fades in on each navigation. */
+.admin-shell__content { animation: fp-route-in 360ms var(--fp-ease-out) backwards; }
+@keyframes fp-route-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+.admin-shell__notice { margin: auto 6px 0; color: rgba(255,255,255,.46); font-size: 12px; line-height: 1.6; }
+.admin-shell__content { max-width: 1220px; margin-left: 274px; padding: 18px; }
+@media (max-width: 800px) {
+  .admin-shell__sidebar { position: static; width: auto; min-height: auto; }
+  .admin-shell__nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-shell__notice { margin-top: 18px; }
+  .admin-shell__content { margin-left: 0; padding: 18px 2px; }
+}

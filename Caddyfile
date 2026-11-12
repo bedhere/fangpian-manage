@@ -1,0 +1,27 @@
+{
+    admin off
+}
+http://192.0.2.10 {
+    redir https://app.example.invalid{uri} permanent
+}
+app.example.invalid, 47-82-155-53.sslip.io {
+    encode zstd gzip
+    handle /api/* {
+        reverse_proxy api:3001
+    }
+    handle {
+        reverse_proxy web:3000
+    }
+}
+todo-admin.example.invalid, admin.47-82-155-53.sslip.io {
+    encode zstd gzip
+    handle /api/* {
+        reverse_proxy api:3001
+    }
+    handle {
+        reverse_proxy admin:3002
+    }
+}
+todo-files.example.invalid, files.47-82-155-53.sslip.io {
+    reverse_proxy minio:9000
+}

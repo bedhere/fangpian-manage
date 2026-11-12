@@ -1,0 +1,106 @@
+name: agimax
+x-backend: &backend
+  NODE_ENV: production
+  TZ: ${APP_TIMEZONE:-Asia/Shanghai}
+  DATABASE_URL: postgresql://valueflow:${POSTGRES_PASSWORD}@postgres:5432/valueflow?schema=public
+  REDIS_URL: redis://redis:6379
+  JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+  JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+  JWT_ACCESS_TTL: 15m
+  JWT_REFRESH_TTL_DAYS: 30
+  AI_BASE_URL: ${AI_BASE_URL:-https://api.deepseek.com}
+  AI_API_KEY: ${AI_API_KEY:-}
+  AI_MODEL: ${AI_MODEL:-deepseek-flash}
+  AI_MAX_ATTEMPTS: ${AI_MAX_ATTEMPTS:-2}
+  AI_TIMEOUT_MS: ${AI_TIMEOUT_MS:-60000}
+  MINIO_ENDPOINT: example.invalid
+  MINIO_PORT: 443
+  MINIO_USE_SSL: "true"
+  MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+  MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+  MINIO_BUCKET: value-flow
+  WEB_ORIGIN: https://example.invalid,https://example.invalid
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: valueflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: valueflow
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U valueflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: [redis-server, --appendonly, "yes"]
+    volumes: [redis_data:/data]
+  minio:
+    image: valueflow-minio:local
+    restart: unless-stopped
+    user: "0:0"
+    command: server /data --console-address :9001
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_API_CORS_ALLOW_ORIGIN: https://example.invalid,https://example.invalid
+    volumes: [minio_data:/data]
+    networks:
+      default: {}
+      edge: {aliases: [agimax-files]}
+  migrate:
+    image: agimax-api:latest
+    build: {context: ../.., target: api, args: {NEXT_PUBLIC_API_URL: "https://example.invalid"}}
+    command: [sh, -c, "pnpm exec prisma migrate deploy"]
+    environment: *backend
+    depends_on:
+      postgres: {condition: service_healthy}
+  api:
+    image: agimax-api:latest
+    build: {context: ../.., target: api, args: {NEXT_PUBLIC_API_URL: "https://example.invalid"}}
+    restart: unless-stopped
+    environment:
+      <<: *backend
+      TRUST_PROXY_HOPS: "1"
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_started}
+      minio: {condition: service_started}
+    networks:
+      default: {}
+      edge: {aliases: [agimax-api]}
+  worker:
+    image: agimax-worker:latest
+    build: {context: ../.., target: worker, args: {NEXT_PUBLIC_API_URL: "https://example.invalid"}}
+    restart: unless-stopped
+    environment: *backend
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_started}
+  web:
+    image: agimax-web:latest
+    build: {context: ../.., target: web, args: {NEXT_PUBLIC_API_URL: "https://example.invalid"}}
+    restart: unless-stopped
+    environment: {HOSTNAME: "0.0.0.0", NEXT_PUBLIC_API_URL: "https://example.invalid"}
+    depends_on:
+      api: {condition: service_healthy}
+    networks:
+      default: {}
+      edge: {aliases: [agimax-web]}
+  admin:
+    image: agimax-admin:latest
+    build: {context: ../.., target: admin, args: {NEXT_PUBLIC_API_URL: "https://example.invalid"}}
+    restart: unless-stopped
+    environment: {HOSTNAME: "0.0.0.0", PORT: 3002, NEXT_PUBLIC_API_URL: "https://example.invalid"}
+    depends_on:
+      api: {condition: service_healthy}
+    networks:
+      default: {}
+      edge: {aliases: [agimax-admin]}
+volumes: {postgres_data: {}, redis_data: {}, minio_data: {}}
+networks:
+  edge: {external: true, name: debian_default}

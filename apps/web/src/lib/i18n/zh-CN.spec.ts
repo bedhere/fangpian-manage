@@ -1,0 +1,1 @@
+import{describe,expect,it}from'vitest';import{translate}from'./zh-CN';describe('Chinese dictionary',()=>{it('loads route-level common labels and preserves unknown keys',()=>{expect(translate('common.confirm')).toBe('确认');expect(translate('missing.key')).toBe('missing.key')})});

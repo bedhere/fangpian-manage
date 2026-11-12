@@ -1,0 +1,4 @@
+ALTER TYPE "AIAssessmentStatus" ADD VALUE IF NOT EXISTS 'QUEUED';
+ALTER TYPE "AIAssessmentStatus" ADD VALUE IF NOT EXISTS 'RUNNING';
+ALTER TABLE "ai_assessments" ADD COLUMN "attempts" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "ai_assessments" ADD COLUMN "last_attempt_at" TIMESTAMP(3);

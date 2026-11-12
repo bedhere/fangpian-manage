@@ -1,0 +1,1 @@
+import { describe, expect, it } from 'vitest'; import { nextReconnectDelay } from './business-events'; describe('business event reconnect',()=>{it('uses bounded exponential backoff',()=>{expect([0,1,2,8].map(x=>nextReconnectDelay(x,1000,5000))).toEqual([1000,2000,4000,5000])})});

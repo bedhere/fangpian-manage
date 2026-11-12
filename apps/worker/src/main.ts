@@ -1,0 +1,14 @@
+import { Queue, Worker } from 'bullmq';
+import { Redis } from 'ioredis';
+import { PrismaClient } from '@value-flow/db';
+import { runProjectHealthJob } from './jobs/project-health.job.js';
+import { runDeadlineReminderJob } from './jobs/deadline-reminder.job.js';
+import { runMonthlySettlementJob } from './jobs/monthly-settlement.job.js';
+import { runAIEvaluationJob } from './jobs/ai-evaluation.job.js';
+import { runAIBuffJob } from './jobs/ai-buff.job.js';
+const connection=new Redis(process.env.REDIS_URL??'redis://localhost:6379',{maxRetriesPerRequest:null});const prisma=new PrismaClient();const queueName='value-flow-system';export const systemQueue=new Queue(queueName,{connection});
+await systemQueue.upsertJobScheduler('daily-project-health',{pattern:'0 2 * * *'},{name:'project-health'});
+await systemQueue.upsertJobScheduler('daily-deadline-reminder',{pattern:'0 1 * * *'},{name:'deadline-reminder'});
+await systemQueue.upsertJobScheduler('monthly-settlement',{pattern:'0 1 1 * *'},{name:'monthly-settlement'});
+export const systemWorker=new Worker(queueName,async job=>{if(job.name==='project-health')return runProjectHealthJob(prisma);if(job.name==='deadline-reminder')return runDeadlineReminderJob(prisma);if(job.name==='monthly-settlement')return runMonthlySettlementJob(prisma);if(job.name==='ai-evaluation')return runAIEvaluationJob(prisma,String(job.data.assessmentId),job.attemptsMade+1>=Number(job.opts.attempts??1));if(job.name==='ai-buff-run')return runAIBuffJob(prisma,String(job.data.runId),job.attemptsMade+1>=Number(job.opts.attempts??1));return{job:job.name,processedAt:new Date().toISOString()};},{connection});
+systemWorker.on('failed',(job,error)=>console.error('Worker job failed',job?.id,error));console.log('ValueFlow worker ready');

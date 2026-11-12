@@ -1,0 +1,2 @@
+import { fireEvent, render, screen } from '@testing-library/react'; import { describe, expect, it, vi } from 'vitest'; import { ConfirmAction } from './confirm-action';
+describe('ConfirmAction', () => { it('requires an explicit second confirmation', () => { const fn = vi.fn(); render(<ConfirmAction label="转换需求" description="将创建业务需求" onConfirm={fn} />); fireEvent.click(screen.getByRole('button', { name: '转换需求' })); expect(fn).not.toHaveBeenCalled(); fireEvent.click(screen.getByRole('button', { name: '确认' })); expect(fn).toHaveBeenCalledOnce(); }); });

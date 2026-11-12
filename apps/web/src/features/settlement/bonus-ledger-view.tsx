@@ -1,0 +1,15 @@
+"use client";
+
+import { Card } from '@fangpian/ui';
+import { useMemo, useState } from 'react';
+
+export type BonusLedger = { id: string; amount: string; contributionPercentage: string; status: 'PENDING' | 'LOCKED' | 'PAID'; settlementMonth: string; project: { title: string; rating: { grade: string } | null } };
+const statusLabels = { PENDING: '待月结', LOCKED: '已锁定', PAID: '已发放' } as const;
+export function BonusLedgerView({ ledgers }: { ledgers: BonusLedger[] }) {
+  const [status, setStatus] = useState('ALL'); const [month, setMonth] = useState('ALL');
+  const months = [...new Set(ledgers.map((item) => item.settlementMonth.slice(0, 7)))].sort().reverse();
+  const visible = ledgers.filter((item) => (status === 'ALL' || item.status === status) && (month === 'ALL' || item.settlementMonth.startsWith(month)));
+  const total = useMemo(() => ledgers.reduce((sum, item) => sum + Number(item.amount), 0), [ledgers]);
+  const paid = useMemo(() => ledgers.filter((item) => item.status === 'PAID').reduce((sum, item) => sum + Number(item.amount), 0), [ledgers]);
+  return <div><div className="grid gap-4 md:grid-cols-3"><Card className="bg-[#303030] p-6 text-white"><p className="text-sm text-white/60">累计奖金</p><strong className="mt-2 block text-4xl">¥ {total.toLocaleString('zh-CN', { minimumFractionDigits: 2 })}</strong></Card><Card className="p-6"><p className="text-sm text-[#777166]">已发放</p><strong className="mt-2 block text-3xl">¥ {paid.toLocaleString('zh-CN', { minimumFractionDigits: 2 })}</strong></Card><Card className="bg-[#ffd85f] p-6"><p className="text-sm font-bold">计算说明</p><strong className="mt-2 block">项目奖金 × 最终贡献比例</strong><p className="mt-2 text-xs">项目奖金由等级倍率、核准工时和生效规则计算，再按最大余数法精确分配到分。</p></Card></div><div className="mt-6 flex flex-wrap gap-3"><label className="grid gap-1 text-sm font-bold">流水状态<select aria-label="流水状态" value={status} onChange={(event) => setStatus(event.target.value)} className="h-11 rounded-xl border border-black/10 bg-white px-3"><option value="ALL">全部状态</option><option value="PENDING">待月结</option><option value="LOCKED">已锁定</option><option value="PAID">已发放</option></select></label><label className="grid gap-1 text-sm font-bold">结算月份<select aria-label="结算月份" value={month} onChange={(event) => setMonth(event.target.value)} className="h-11 rounded-xl border border-black/10 bg-white px-3"><option value="ALL">全部月份</option>{months.map((item) => <option key={item}>{item}</option>)}</select></label></div><section className="mt-6 space-y-4">{visible.map((item) => <Card key={item.id} className="grid gap-3 p-5 sm:grid-cols-[1fr_auto_auto]"><div><h2 className="font-black">{item.project.title}</h2><p className="mt-1 text-sm text-[#777166]">贡献 {item.contributionPercentage}% · {item.project.rating?.grade ?? '未评级'} 级 · {item.settlementMonth.slice(0, 7)}</p></div><strong className="text-xl">¥ {Number(item.amount).toFixed(2)}</strong><span className="rounded-full bg-[#ffd85f] px-3 py-1 text-center text-xs font-black">{statusLabels[item.status]}</span></Card>)}{!visible.length ? <Card className="p-10 text-center"><h2 className="text-xl font-black">当前筛选没有奖金流水</h2></Card> : null}</section></div>;
+}

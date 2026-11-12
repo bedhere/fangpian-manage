@@ -1,0 +1,1217 @@
+{
+  "base_id": "bseDw9MUORCERBgR4DV",
+  "tables": [
+    {
+      "id": "tblIpfKaRNDa4ksSTEw",
+      "name": "example_notes",
+      "file": "01_example_notes",
+      "fields": [
+        {
+          "id": "fldlTre3VgwsK8kEHty",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldywtAbHvTwQb5Liol",
+          "name": "title",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldfmAQDuquxSUMuj4X",
+          "name": "content",
+          "type": "longText"
+        },
+        {
+          "id": "flduvg8UwLv2VUh4AWQ",
+          "name": "tag",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldTyEZj1OYuNQeM8K9",
+          "name": "imageUrl",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldTiSIrc9y4BWjeqGk",
+          "name": "targetId",
+          "type": "number",
+          "description": "天玑目标 ID",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fld1R7bk2MSvhcNN7RM",
+          "name": "employeeId",
+          "type": "number",
+          "description": "天玑员工 ID",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldbXiT0Nmr7bJ6ReZA",
+          "name": "employeeName",
+          "type": "singleLineText",
+          "description": "员工姓名"
+        },
+        {
+          "id": "fldQzzuyYM7Ng4478EP",
+          "name": "yearName",
+          "type": "singleLineText",
+          "description": "年份标签"
+        },
+        {
+          "id": "fld9C1fTIQkGqAgq3s2",
+          "name": "monthName",
+          "type": "singleLineText",
+          "description": "月份标签"
+        },
+        {
+          "id": "fld4r0v3F3Seb4rwhQf",
+          "name": "monthId",
+          "type": "number",
+          "description": "天玑月份 ID",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fld3ObXHHgYxASycMhP",
+          "name": "goalTypeText",
+          "type": "singleLineText",
+          "description": "目标类型"
+        },
+        {
+          "id": "fldY2FQ4kNEZGJMsdfm",
+          "name": "responsibleTypeText",
+          "type": "singleLineText",
+          "description": "数值类型"
+        },
+        {
+          "id": "fldJLZxp3awePJwycdt",
+          "name": "salaryItemText",
+          "type": "singleLineText",
+          "description": "薪酬项类型"
+        },
+        {
+          "id": "fldYC5iPnUEc22RkBGj",
+          "name": "roleCodeText",
+          "type": "singleLineText",
+          "description": "角色类型"
+        },
+        {
+          "id": "fldwuj3chzZH1iB6FLr",
+          "name": "confirmStatusText",
+          "type": "singleLineText",
+          "description": "确认状态"
+        },
+        {
+          "id": "fldcyIUB45GMDd8yddy",
+          "name": "platformName",
+          "type": "singleLineText",
+          "description": "平台名"
+        },
+        {
+          "id": "fld2HMzJMaHeEsVVnhE",
+          "name": "departmentName",
+          "type": "singleLineText",
+          "description": "部门名"
+        },
+        {
+          "id": "fldRF7a0wdncjaGf2cu",
+          "name": "goal",
+          "type": "number",
+          "description": "目标金额",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldqJebhun11SRdUNLm",
+          "name": "completion",
+          "type": "number",
+          "description": "完成金额",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldd8dyV9CA10hVanxs",
+          "name": "completionRate",
+          "type": "number",
+          "description": "完成率",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldB9ym3CeZfDoG2tSA",
+          "name": "groupName",
+          "type": "singleSelect",
+          "description": "Excel 小组名",
+          "options": {
+            "choices": [
+              {
+                "color": "cyanLight2",
+                "id": "choH9nOhSUz",
+                "name": "示例对客16别名组"
+              },
+              {
+                "color": "pinkLight1",
+                "id": "choswQDndF3",
+                "name": "示例对客13别名组"
+              },
+              {
+                "color": "pinkLight2",
+                "id": "choSBPxC0u7",
+                "name": "示例对客14别名组"
+              },
+              {
+                "color": "cyanBright",
+                "id": "chogGUsrCqV",
+                "name": "小存组"
+              }
+            ]
+          }
+        },
+        {
+          "id": "fldN3pwawM4HR78q7oN",
+          "name": "positionName",
+          "type": "singleLineText",
+          "description": "Excel 职位"
+        },
+        {
+          "id": "fldOEjycB4sXzW07sQN",
+          "name": "flowerName",
+          "type": "singleLineText",
+          "description": "Excel 花名"
+        },
+        {
+          "id": "fldrnnxjuFzwxVBFnBd",
+          "name": "deptId",
+          "type": "number",
+          "description": "天玑部门 ID",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldweKMN9AWNWAllskp",
+          "name": "inExcelRoster",
+          "type": "checkbox",
+          "description": "是否在 Excel 名单中"
+        },
+        {
+          "id": "fldd2LdG4FQeoOJ8uqT",
+          "name": "yearId",
+          "type": "number",
+          "description": "天玑年度 ID",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldNeyYfhYFE1Z7YxcL",
+          "name": "syncTime",
+          "type": "date",
+          "description": "同步时间",
+          "options": {
+            "formatting": {
+              "date": "YYYY-MM-DD",
+              "time": "None",
+              "timeZone": "UTC"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tblQvDQfQokU1lJEL0t",
+      "name": "dashboard_targets",
+      "file": "02_dashboard_targets",
+      "fields": [
+        {
+          "id": "fldP6h0lr5rbM33JZvv",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldv4yx6Il5FvIFmxT6",
+          "name": "targetId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldGNkCI3jT4xMUlhJ7",
+          "name": "employeeId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldQrXC7kgVNY4jgIHc",
+          "name": "employeeName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldkgFiI8iWD4jCms6Y",
+          "name": "yearName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldutXfP8e52GHmPzQA",
+          "name": "monthName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldJSQ39rzLv40gSoBL",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldC2DdUV5VMvXwM9Yb",
+          "name": "goalTypeText",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldrRRtFPZlsXiXxG3N",
+          "name": "responsibleTypeText",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld4rGPXf16ykorLHLg",
+          "name": "salaryItemText",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldZ73O7lNLZKYxScDW",
+          "name": "roleCodeText",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldU9FMe25XhjUQeT0X",
+          "name": "confirmStatusText",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld5GICX0ARFURJeOi9",
+          "name": "platformName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldy6V30O6IHAUI3EjS",
+          "name": "departmentName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldGh6Ab37cFVqQZ0QT",
+          "name": "goal",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fld42uBFXd6BEm3BFzm",
+          "name": "completion",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldslX4CtyJGZOckVhE",
+          "name": "completionRate",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 4,
+              "type": "decimal"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tbl7iqTcpbdaXsG8Nzz",
+      "name": "ScheduledTasks",
+      "file": "03_ScheduledTasks",
+      "fields": [
+        {
+          "id": "fldPokcLuBifcIOexe1",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldeWcrcTH3vUEgRjZO",
+          "name": "Description",
+          "type": "longText"
+        },
+        {
+          "id": "fldoYBQ9CMKnWrR4eZe",
+          "name": "Cron",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldgzW7Gkm15UZ6G2ZG",
+          "name": "Schedule",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldqrEyB8PtD1KnNyFw",
+          "name": "Enabled",
+          "type": "checkbox"
+        },
+        {
+          "id": "fld3ulGLsDmoBvsMIcz",
+          "name": "Deleted",
+          "type": "checkbox"
+        },
+        {
+          "id": "fldKqZuiqHmWzpbcyrI",
+          "name": "CodeCron",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldVmrUMhC2rhRBhYGD",
+          "name": "CodeSchedule",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldWWv0mILS7AQeHAkh",
+          "name": "CodeDescription",
+          "type": "longText"
+        },
+        {
+          "id": "fldygQaMz1zgrsqUCKR",
+          "name": "CreatedAt",
+          "type": "date",
+          "options": {
+            "formatting": {
+              "date": "YYYY-MM-DD",
+              "time": "HH:mm",
+              "timeZone": "Asia/Shanghai"
+            }
+          }
+        },
+        {
+          "id": "fldHgy5ow51zIELzFOv",
+          "name": "RunCount",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldQxIes6C9wyAUHS0j",
+          "name": "LastStatus",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldqel7drEhdfbTmVbW",
+          "name": "LastRunAt",
+          "type": "date",
+          "options": {
+            "formatting": {
+              "date": "YYYY-MM-DD",
+              "time": "HH:mm",
+              "timeZone": "Asia/Shanghai"
+            }
+          }
+        },
+        {
+          "id": "fldCT5JunDIh7dn7aqc",
+          "name": "LastDurationMs",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldFiQPdIFJo3H6UagX",
+          "name": "LastArtifacts",
+          "type": "longText"
+        },
+        {
+          "id": "fld5ek0tJRrESYHttgm",
+          "name": "LastError",
+          "type": "longText"
+        }
+      ]
+    },
+    {
+      "id": "tblxuS70OR26lqX1UOA",
+      "name": "ScheduledTaskRuns",
+      "file": "04_ScheduledTaskRuns",
+      "fields": [
+        {
+          "id": "fldO5rIDfLUhaiJZ4Qu",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldPqip2fie6aPAtXEK",
+          "name": "TaskName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldT6zFzujHoYkSzKzA",
+          "name": "ScheduledFor",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldNIBeZLJLJLwXvJQ8",
+          "name": "Trigger",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldVrDuO0BImjU161cO",
+          "name": "StartedAt",
+          "type": "date",
+          "options": {
+            "formatting": {
+              "date": "YYYY-MM-DD",
+              "time": "HH:mm",
+              "timeZone": "Asia/Shanghai"
+            }
+          }
+        },
+        {
+          "id": "fldmrExvkbKpij4zBlg",
+          "name": "FinishedAt",
+          "type": "date",
+          "options": {
+            "formatting": {
+              "date": "YYYY-MM-DD",
+              "time": "HH:mm",
+              "timeZone": "Asia/Shanghai"
+            }
+          }
+        },
+        {
+          "id": "fldooNMVyJgp3bYFXZv",
+          "name": "Status",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld8O20ZAKlmwAWddwn",
+          "name": "DurationMs",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldkFWMwtVSwqniBS1B",
+          "name": "Artifacts",
+          "type": "longText"
+        },
+        {
+          "id": "fldYQDwk30W9dj04hWh",
+          "name": "Error",
+          "type": "longText"
+        }
+      ]
+    },
+    {
+      "id": "tblSGbJd9LyakXJ0kTv",
+      "name": "dashboard_metric_targets",
+      "file": "05_dashboard_metric_targets",
+      "fields": [
+        {
+          "id": "fldmwyWfKA5r9qcwpQo",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldPPlhvN3nxc3D3ffQ",
+          "name": "recordKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldCkvKORrZsLKaClg6",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldfAXK2mBJRJDj1zOj",
+          "name": "employeeId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "flduIMxSS1Vy9L08gLZ",
+          "name": "employeeName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldyfN3TuS8Z4nWVk8r",
+          "name": "dimension",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldDAd68WdHtPMx91XM",
+          "name": "metricKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldCHMixdcCYrvw0Zlp",
+          "name": "metricName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldjjU4wbXau2QSpAUo",
+          "name": "target",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldnVoMlcyck2HQB4XY",
+          "name": "commissionRate",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 4,
+              "type": "decimal"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tblnNm3ig8hmiV79pH0",
+      "name": "dashboard_performance_snapshots",
+      "file": "06_dashboard_performance_snapshots",
+      "fields": [
+        {
+          "id": "fldYTDOfn5BAY5srxyB",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldniimDpPjfmxcPOAX",
+          "name": "snapshotKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "flduNbkDiYyssnOA4Gd",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldhtulE9i4yxhaDL0H",
+          "name": "employeeId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldgTLGhPw88qnz4ahY",
+          "name": "employeeName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldpx1WMwHZBykr29nJ",
+          "name": "metricsJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldYWGMoWLqTplOme2Q",
+          "name": "refreshedAt",
+          "type": "singleLineText"
+        }
+      ]
+    },
+    {
+      "id": "tblma9wWIys5GmLGIa6",
+      "name": "dashboard_unpublished_snapshots",
+      "file": "07_dashboard_unpublished_snapshots",
+      "fields": [
+        {
+          "id": "fldBzKg7xx60oMeVqGw",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldyvehXcuXJFJE4Ddq",
+          "name": "snapshotKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldQPsXmNC2E7R2cXdJ",
+          "name": "employeeId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fld7CISC2OF84LyrqLa",
+          "name": "employeeName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld7OFfXGVMTZPqEPcw",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldvZp6L8PxJcD2uVNp",
+          "name": "generation",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldqqXC1vTisliFwcgj",
+          "name": "chunkIndex",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldbIqMMoYaspfbUoR8",
+          "name": "orderCount",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldMOYtU1sOeCxd8Ayw",
+          "name": "ordersJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldVVbeyn6fFpXNPSIy",
+          "name": "periodStart",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldlQIvjDN24HAbkNBh",
+          "name": "periodEnd",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldwpCINcAzgX9kGkUP",
+          "name": "refreshedAt",
+          "type": "singleLineText"
+        }
+      ]
+    },
+    {
+      "id": "tblcFcsH2yguwG1GqHm",
+      "name": "dashboard_company_snapshots",
+      "file": "08_dashboard_company_snapshots",
+      "fields": [
+        {
+          "id": "fldrYr54OIzfShxlUjw",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldxjeYt9ss7iNlO50y",
+          "name": "snapshotKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldwYcV3PbbV0oeexUP",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldeeTwNcwbcXX5PQIL",
+          "name": "dimension",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldY36UbAmhD2doIcVH",
+          "name": "companiesJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldA5ioueu0wZmDkT9q",
+          "name": "periodStart",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldOrIi567vRAbCXvLc",
+          "name": "periodEnd",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fld3SGfUQLyugV1Uo6f",
+          "name": "refreshedAt",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldQthYHN8zhfQzW02h",
+          "name": "ordersGeneration",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldCJ8mezwOto9Py5Df",
+          "name": "employeeName",
+          "type": "singleLineText"
+        }
+      ]
+    },
+    {
+      "id": "tbl4Ppzg0zCj135SV9V",
+      "name": "dashboard_company_order_snapshots",
+      "file": "09_dashboard_company_order_snapshots",
+      "fields": [
+        {
+          "id": "fldCMKFcfpjrraS959e",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldDJ7otxGkivOtvGWh",
+          "name": "snapshotKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld3tFp2bMoAcRxrKxE",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldfKFtyMpD0hFprWkC",
+          "name": "dimension",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld1eWJSwMKqyDw4t7M",
+          "name": "generation",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld49YvsFG331UlNuOF",
+          "name": "chunkIndex",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldyGk7RGzYDFxtwqXp",
+          "name": "orderCount",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldRGDyAGUWhA1JPVCG",
+          "name": "ordersJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldEy4puxj5FX7MdKx1",
+          "name": "periodStart",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fld1CPX5yXMFYM7Gl4S",
+          "name": "periodEnd",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldDLnUk1hU9lyQjkuP",
+          "name": "refreshedAt",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldV53wdkPDIUIpw5mn",
+          "name": "employeeName",
+          "type": "singleLineText"
+        }
+      ]
+    },
+    {
+      "id": "tblhCRq0c6gvNnv7sP3",
+      "name": "dashboard_target_management_brand_snapshots",
+      "file": "10_dashboard_target_management_brand_snapshots",
+      "fields": [
+        {
+          "id": "fldHmbn4QZ2AETbbmXk",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldIC8ggU4iFwTF2duO",
+          "name": "snapshotKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fld5iGZjFajhxxtCgaj",
+          "name": "brandsJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldHAV8mNjCP6RccNQd",
+          "name": "refreshedAt",
+          "type": "singleLineText"
+        }
+      ]
+    },
+    {
+      "id": "tblXGDDETtzEXh0yfCk",
+      "name": "dashboard_target_management_company_snapshots",
+      "file": "11_dashboard_target_management_company_snapshots",
+      "fields": [
+        {
+          "id": "fldtm80CIcdiHukl8iY",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldewVfmf94j6hof5z2",
+          "name": "snapshotKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldVO8br3op4eemfVXt",
+          "name": "companiesJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldydKZYh4sMuLRXdmX",
+          "name": "refreshedAt",
+          "type": "singleLineText"
+        }
+      ]
+    },
+    {
+      "id": "tblveDZfBcerYoiZXUY",
+      "name": "dashboard_target_management_submission_count_snapshots",
+      "file": "12_dashboard_target_management_submission_count_snapshots",
+      "fields": [
+        {
+          "id": "fldDxg6HoWeohSkTGwj",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldqW8NX5EutoeJBtD2",
+          "name": "snapshotKey",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldQi6P6tAgkBSwi5ND",
+          "name": "employeeName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldxcj98NAVfd4Qj1MY",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldTdSJ0jxkPwWAlAYa",
+          "name": "countsJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldcL7FiAh3GwwRDrtL",
+          "name": "projectCount",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fld7kYl8A71wsgAI7Yr",
+          "name": "periodStart",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldTDAWhZ5U1PuWo56w",
+          "name": "periodEnd",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldTjoqJNj8dmou1P9G",
+          "name": "refreshedAt",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldakZDNeVsvEttSryk",
+          "name": "detailsJson",
+          "type": "longText"
+        }
+      ]
+    },
+    {
+      "id": "tbl4utjQjnIn8KJvG4b",
+      "name": "dashboard_muyuan_target_split_plans",
+      "file": "13_dashboard_muyuan_target_split_plans",
+      "fields": [
+        {
+          "id": "fldBxBFx6MmRq0LUiPA",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldgBhAqueGc2EY7FWM",
+          "name": "ownerName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "flddEixBkbDPQMaZldb",
+          "name": "monthId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "flde610FIsr3ZDyM0aq",
+          "name": "planJson",
+          "type": "longText"
+        },
+        {
+          "id": "fldroNrU2rNATeFjP19",
+          "name": "updatedAt",
+          "type": "singleLineText"
+        }
+      ]
+    },
+    {
+      "id": "tbld9ErJFfOxyt4cwHq",
+      "name": "dashboard_login_sessions",
+      "file": "14_dashboard_login_sessions",
+      "fields": [
+        {
+          "id": "fldVIOhVpVtcoYX1gjz",
+          "name": "Name",
+          "type": "singleLineText",
+          "isPrimary": true
+        },
+        {
+          "id": "fldpUIZUXzCDgfiSqyu",
+          "name": "sessionHash",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldziOQGZxtIykqXAYZ",
+          "name": "employeeId",
+          "type": "number",
+          "options": {
+            "formatting": {
+              "precision": 2,
+              "type": "decimal"
+            }
+          }
+        },
+        {
+          "id": "fldlC1pZsKgpqHx6uzy",
+          "name": "employeeName",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldjYp8qwpZzknmlzQZ",
+          "name": "createdAt",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldKoGXga4C24DHdjPP",
+          "name": "expiresAt",
+          "type": "singleLineText"
+        },
+        {
+          "id": "fldUHNCF7IASy743SaB",
+          "name": "revoked",
+          "type": "checkbox"
+        }
+      ]
+    }
+  ]
+}

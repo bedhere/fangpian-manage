@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "./dist",
+    "rootDir": "./server",
+    "declaration": false,
+    "removeComments": true,
+    "sourceMap": false,
+    "paths": {}
+  },
+  // 不 include shared/, 让 rootDir=server 简洁: server/main.ts → dist/main.js
+  // shared/ 通过 tsconfig.json 的 paths 别名给 Vite 客户端用, server 端内联类型.
+  // paths 必须清空: 继承的 @shared/* 会让 TS 解析到 rootDir 外的文件, 即使 import type 也报 TS6059.
+  "include": ["server/**/*"],
+  "exclude": ["client", "node_modules", "dist"],
+  // NFS 上 inotify 不发, tsc -w 默认走 fs.watch 没事件 → tsc-watch --onSuccess 不重启
+  // node, AI 改了代码 server 还是旧版. 强制 polling.
+  "watchOptions": {
+    "watchFile": "priorityPollingInterval",
+    "watchDirectory": "dynamicPriorityPolling",
+    "fallbackPolling": "dynamicPriority"
+  }
+}

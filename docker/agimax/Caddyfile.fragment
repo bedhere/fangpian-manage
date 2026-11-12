@@ -1,0 +1,30 @@
+example.invalid {
+    encode zstd gzip
+    handle /api/* {
+        reverse_proxy agimax-api:3001 {
+            flush_interval -1
+        }
+    }
+    handle {
+        reverse_proxy agimax-web:3000
+    }
+}
+
+example.invalid {
+    encode zstd gzip
+    handle /api/* {
+        reverse_proxy agimax-api:3001 {
+            flush_interval -1
+        }
+    }
+    handle {
+        reverse_proxy agimax-admin:3002
+    }
+}
+
+example.invalid {
+    request_body {
+        max_size 2GB
+    }
+    reverse_proxy agimax-files:9000
+}

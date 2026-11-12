@@ -1,0 +1,6 @@
+// Migration-only datasource for the independent external_collab database.
+// The SQL migrations are authoritative; this app uses the existing pg repository.
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}

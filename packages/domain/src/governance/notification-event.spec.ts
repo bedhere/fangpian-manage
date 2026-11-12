@@ -1,0 +1,2 @@
+import { describe,expect,it } from 'vitest';import { toNotificationEvent } from './notification-event.js';
+describe('notification SSE event',()=>it('uses a stable event id and notification event name',()=>expect(toNotificationEvent({id:'n1',title:'待审核',body:'项目需要审核',createdAt:new Date('2026-10-05T00:00:00Z')})).toEqual({id:'n1',type:'notification',data:{id:'n1',title:'待审核',body:'项目需要审核',createdAt:'2026-10-05T00:00:00.000Z'}})));

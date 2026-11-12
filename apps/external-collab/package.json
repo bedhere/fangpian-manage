@@ -1,0 +1,69 @@
+{
+  "name": "@fangpian/external-collab",
+  "private": true,
+  "version": "0.0.1",
+  "_comment_studio": "studio.previewChecks: Studio 在你声明完成时会打开真实预览逐条核对这些路由(不是你进程内的临时 server)。path 写关键页/接口的相对路径; nonEmpty:true 表示该接口必须返回真实非空数据(不是 200 空数组/全零)。请把首页与每个核心数据接口加进来(带真实查询参数), 这样'打开是空的'会在收尾前被自动挡回让你修, 而不是交付一个空壳。",
+  "studio": {
+    "previewChecks": [
+      {
+        "path": "/"
+      },
+      {
+        "path": "/api/tianji/login/session"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "build:client": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "start": "node dist/main.js",
+    "ensure": "[ -f node_modules/.bin/vite ] || pnpm install --no-frozen-lockfile; { [ -f dist/main.js ] || [ -f dist/server/main.js ] || [ -f dist/server-build/server/main.js ]; } && [ -f dist/client/index.html ] || pnpm run build",
+    "start:dev": "pnpm run ensure && concurrently -n web,srv -c green,blue --kill-others-on-fail \"VITE_BUILD_WATCH=1 vite build --watch --mode production\" \"tsc-watch -p tsconfig.server.json --onSuccess 'node $(test -f dist/main.js && echo dist/main.js || test -f dist/server/main.js && echo dist/server/main.js || echo dist/server-build/server/main.js)'\"",
+    "test": "node --test test/*.test.cjs"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.4.0",
+    "@nestjs/core": "^10.4.0",
+    "@nestjs/platform-express": "^10.4.0",
+    "@nestjs/schedule": "^4.1.0",
+    "@nestjs/serve-static": "^4.0.2",
+    "cron": "^3.1.7",
+    "drizzle-orm": "^0.36.0",
+    "express": "^4.21.0",
+    "minio": "8.0.7",
+    "pg": "^8.13.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "concurrently": "^9.0.0",
+    "drizzle-kit": "^0.28.0",
+    "tsc-watch": "^6.2.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0"
+  },
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "libc": [
+        "glibc",
+        "musl"
+      ]
+    }
+  }
+}

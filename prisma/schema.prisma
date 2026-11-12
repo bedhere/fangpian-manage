@@ -1,0 +1,1863 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EntityStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum CapabilityLevel {
+  L0
+  L1
+  L2
+  L3
+  L4
+}
+
+enum ProjectLevel {
+  P0
+  P1
+  P2
+  P3
+  P4
+}
+
+enum ProjectStatus {
+  DRAFT
+  AI_TRIAGE
+  AI_EXECUTABLE
+  AI_WORKSPACE
+  AI_COMPLETED
+  HUMAN_REQUIRED
+  DEPARTMENT_REVIEW
+  TECH_REVIEW
+  APPROVED
+  PUBLISHED
+  APPLICATION_OPEN
+  OWNER_ASSIGNED
+  PLANNING
+  IN_PROGRESS
+  AT_RISK
+  DELIVERY_SUBMITTED
+  AI_DELIVERY_REVIEW
+  BUSINESS_ACCEPTANCE
+  FINAL_RATING
+  EXECUTIVE_CONFIRMATION
+  CONTRIBUTION_CONFIRMATION
+  SETTLEMENT_PENDING
+  SETTLED
+  REJECTED
+  CANCELLED
+  FAILED
+  OWNER_REPLACED
+}
+
+enum ApprovalStage {
+  BUSINESS
+  TECHNICAL
+}
+
+enum ApprovalDecision {
+  APPROVED
+  REJECTED
+  REVISION_REQUIRED
+}
+
+enum AIAssessmentType {
+  PROJECT_TRIAGE
+  DELIVERY_REVIEW
+  RISK_ANALYSIS
+  MATCH_EXPLANATION
+}
+
+enum AIAssessmentStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  FALLBACK_MANUAL
+}
+
+enum CapacityStatus {
+  AVAILABLE
+  LIMITED
+  UNAVAILABLE
+}
+
+enum ProjectApplicationStatus {
+  PENDING
+  SPECIAL_CAPABILITY_REVIEW
+  APPROVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum ProjectMemberRole {
+  OWNER
+  CONTRIBUTOR
+  SUPERVISOR
+  REVIEWER
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+}
+
+enum ProjectHealthStatus {
+  GREEN
+  YELLOW
+  RED
+}
+
+enum ProjectPlanStatus {
+  DRAFT
+  SUBMITTED
+  CONFIRMED
+  SUPERSEDED
+}
+
+enum TeamInvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+enum DeliverableType {
+  FILE
+  LINK
+  TEXT
+  REPOSITORY
+  OTHER
+}
+
+enum AcceptanceRole {
+  PUBLISHER_BUSINESS
+  DEPARTMENT_HEAD_BUSINESS
+  OWNER_MANAGER_TECHNICAL
+}
+
+enum AcceptanceDecision {
+  APPROVED
+  REJECTED
+  REVISION_REQUIRED
+}
+
+enum ProjectGrade {
+  S
+  A
+  B
+  C
+  FAIL
+}
+
+enum ContributionStatus {
+  PENDING
+  CONFIRMED
+  DISPUTED
+  ARBITRATED
+}
+
+enum ContributionDisputeStatus {
+  OPEN
+  RESOLVED
+}
+
+enum BonusLedgerStatus {
+  PENDING
+  LOCKED
+  PAID
+}
+
+enum SettlementBatchStatus {
+  LOCKED
+  PAID
+}
+
+enum ReputationEventType {
+  GRADE_S
+  GRADE_A
+  ON_TIME
+  OWNER_REPLACED
+  PROJECT_FAILED
+  MALICIOUS_ABANDON
+}
+
+enum UserRestrictionType {
+  MAX_PROJECT_LEVEL
+  HIGH_LEVEL_PROJECT_BLOCK
+  PROJECT_APPLICATION_BLOCK
+}
+
+enum SkillVerificationStatus {
+  SELF_DECLARED
+  VERIFIED
+}
+
+enum SkillEvidenceStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum NotificationType {
+  PROJECT
+  REVIEW
+  RISK
+  SETTLEMENT
+  SYSTEM
+}
+
+enum BusinessRequestStatus {
+  DRAFT
+  DIAGNOSING
+  AI_WORKSPACE
+  HUMAN_PROJECT
+  COMPLETED
+  CANCELLED
+}
+
+enum AIWorkspaceStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+}
+
+enum AIMessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum AIGenerationStatus {
+  NONE
+  PENDING
+  SUCCEEDED
+  FAILED
+}
+
+enum KnowledgeAssetStatus {
+  DRAFT
+  BUSINESS_REVIEW
+  TECHNICAL_REVIEW
+  PUBLISHED
+  REJECTED
+}
+
+enum KnowledgeAssetType {
+  PLAYBOOK
+  TEMPLATE
+  CASE_STUDY
+  PROMPT
+  TOOL
+  OTHER
+}
+
+enum OpportunityVisibility {
+  ORGANIZATION
+  DEPARTMENT
+}
+enum OpportunityStatus {
+  OPEN
+  CONVERTED
+  CLOSED
+}
+enum OpportunityProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+enum CircleVisibility {
+  ORGANIZATION
+  DEPARTMENT
+  MEMBERS
+}
+enum CircleStatus {
+  OPEN
+  CLOSED
+}
+enum CircleMemberRole {
+  OWNER
+  MEMBER
+}
+enum CircleJoinStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+enum AIBuffType {
+  PROMPT
+  AGENT
+  WORKFLOW
+  TOOL
+}
+enum AIBuffStatus {
+  DRAFT
+  PUBLISHED
+  RETIRED
+}
+enum AIBuffRunStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+model Organization {
+  id               String            @id @default(uuid()) @db.Uuid
+  name             String
+  slug             String            @unique
+  status           EntityStatus      @default(ACTIVE)
+  createdAt        DateTime          @default(示例公司有限公司()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  deletedAt        DateTime?         @map("deleted_at")
+  departments      Department[]
+  users            User[]
+  roles            Role[]
+  settings         SystemSetting[]
+  auditLogs        AuditLog[]
+  projects         Project[]
+  skills           Skill[]
+  bonusRules       BonusRule[]
+  businessRequests BusinessRequest[]
+  knowledgeAssets  KnowledgeAsset[]
+  traineeProfiles  TraineeProfile[]
+  traineeSubmissions TraineeSubmission[]
+  labelingEntries TraineeLabelingEntry[]
+  labelingImports TraineeLabelingImport[]
+  labelingTianjiIdentities TraineeLabelingTianjiIdentity[]
+  labelingTianjiDays TraineeLabelingTianjiDay[]
+  labelingSyncs TraineeLabelingSync[]
+
+  @@map("organizations")
+}
+
+model Department {
+  id                String       @id @default(uuid()) @db.Uuid
+  organizationId    String       @map("organization_id") @db.Uuid
+  parentId          String?      @map("parent_id") @db.Uuid
+  headId            String?      @map("head_id") @db.Uuid
+  name              String
+  code              String
+  status            EntityStatus @default(ACTIVE)
+  createdBy         String?      @map("created_by") @db.Uuid
+  createdAt         DateTime     @default(示例公司有限公司()) @map("created_at")
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+  deletedAt         DateTime?    @map("deleted_at")
+  organization      Organization @relation(fields: [organizationId], references: [id])
+  parent            Department?  @relation("DepartmentTree", fields: [parentId], references: [id])
+  children          Department[] @relation("DepartmentTree")
+  head              User?        @relation("DepartmentHead", fields: [headId], references: [id])
+  members           User[]       @relation("DepartmentMembers")
+  publishedProjects Project[]
+  traineeSubmissions TraineeSubmission[]
+
+  @@unique([organizationId, name])
+  @@unique([organizationId, code])
+  @@index([headId])
+  @@map("departments")
+}
+
+model User {
+  id                        String                   @id @default(uuid()) @db.Uuid
+  organizationId            String                   @map("organization_id") @db.Uuid
+  departmentId              String?                  @map("department_id") @db.Uuid
+  managerId                 String?                  @map("manager_id") @db.Uuid
+  email                     String
+  username                  String?                  @unique
+  isDemoAccount             Boolean                  @default(false) @map("is_demo_account")
+  mustChangePassword        Boolean                  @default(false) @map("must_change_password")
+  tokenVersion              Int                      @default(0) @map("token_version")
+  displayName               String                   @map("display_name")
+  passwordHash              String                   @map("password_hash")
+  status                    UserStatus               @default(ACTIVE)
+  createdBy                 String?                  @map("created_by") @db.Uuid
+  createdAt                 DateTime                 @default(示例公司有限公司()) @map("created_at")
+  updatedAt                 DateTime                 @updatedAt @map("updated_at")
+  deletedAt                 DateTime?                @map("deleted_at")
+  organization              Organization             @relation(fields: [organizationId], references: [id])
+  department                Department?              @relation("DepartmentMembers", fields: [departmentId], references: [id])
+  managedDepartments        Department[]             @relation("DepartmentHead")
+  manager                   User?                    @relation("UserManager", fields: [managerId], references: [id])
+  reports                   User[]                   @relation("UserManager")
+  profile                   EmployeeProfile?
+  roles                     UserRole[]
+  refreshTokens             RefreshToken[]
+  auditLogs                 AuditLog[]               @relation("AuditActor")
+  ownedProjects             Project[]                @relation("ProjectOwner")
+  supervisedProjects        Project[]                @relation("ProjectSupervisor")
+  projectApprovals          ProjectApproval[]
+  publishedProjects         Project[]                @relation("ProjectPublisher")
+  skills                    EmployeeSkill[]
+  capacities                EmployeeCapacity[]
+  projectApplications       ProjectApplication[]     @relation("ApplicationApplicant")
+  decidedApplications       ProjectApplication[]     @relation("ApplicationDecision")
+  projectMemberships        ProjectMember[]
+  submittedDeliveries       ProjectDelivery[]
+  deliveryAcceptances       DeliveryAcceptance[]     @relation("AcceptanceReviewer")
+  confirmedRatings          ProjectRating[]          @relation("RatingConfirmer")
+  contributions             ProjectContribution[]    @relation("ContributionUser")
+  proposedContributions     ProjectContribution[]    @relation("ContributionProposer")
+  raisedDisputes            ContributionDispute[]    @relation("DisputeRaiser")
+  arbitratedDisputes        ContributionDispute[]    @relation("DisputeArbitrator")
+  bonusLedgers              BonusLedger[]
+  reputationEvents          ReputationEvent[]
+  restrictions              UserRestriction[]
+  verifiedSkills            EmployeeSkill[]          @relation("SkillVerifier")
+  capabilityHistory         CapabilityLevelHistory[] @relation("CapabilityEmployee")
+  approvedCapabilityHistory CapabilityLevelHistory[] @relation("CapabilityApprover")
+  skillEvidence             ProjectSkillEvidence[]   @relation("SkillEvidenceEmployee")
+  reviewedSkillEvidence     ProjectSkillEvidence[]   @relation("SkillEvidenceReviewer")
+  notifications             Notification[]
+  businessRequests          BusinessRequest[]
+  aiWorkspaceSessions       AIWorkspaceSession[]
+  knowledgeAssets           KnowledgeAsset[]
+  knowledgeAssetReviews     KnowledgeAssetReview[]
+  confirmedProjectPlans     ProjectPlan[]             @relation("PlanConfirmer")
+  sentTeamInvitations       ProjectTeamInvitation[]   @relation("InvitationSender")
+  receivedTeamInvitations   ProjectTeamInvitation[]   @relation("InvitationRecipient")
+  traineeProfile            TraineeProfile?          @relation("TraineeUser")
+  mentoredTrainees           TraineeProfile[]         @relation("TraineeMentor")
+  traineeReviews            TraineeReview[]
+
+  @@unique([organizationId, email])
+  @@index([organizationId, departmentId])
+  @@index([organizationId, status, deletedAt])
+  @@map("users")
+}
+
+model EmployeeProfile {
+  id              String          @id @default(uuid()) @db.Uuid
+  userId          String          @unique @map("user_id") @db.Uuid
+  capabilityLevel CapabilityLevel @default(L0) @map("capability_level")
+  reputationScore Int             @default(100) @map("reputation_score")
+  timezone        String          @default("Asia/Shanghai")
+  bio             String?
+  createdAt       DateTime        @default(示例公司有限公司()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+  user            User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@map("employee_profiles")
+}
+
+model Role {
+  id             String           @id @default(uuid()) @db.Uuid
+  organizationId String           @map("organization_id") @db.Uuid
+  code           String
+  name           String
+  description    String?
+  isSystem       Boolean          @default(false) @map("is_system")
+  status         EntityStatus     @default(ACTIVE)
+  createdAt      DateTime         @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  organization   Organization     @relation(fields: [organizationId], references: [id])
+  permissions    RolePermission[]
+  users          UserRole[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId, status])
+  @@map("roles")
+}
+
+model Permission {
+  id          String           @id @default(uuid()) @db.Uuid
+  code        String           @unique
+  description String?
+  createdAt   DateTime         @default(示例公司有限公司()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  roles       RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String     @map("role_id") @db.Uuid
+  permissionId String     @map("permission_id") @db.Uuid
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  userId    String   @map("user_id") @db.Uuid
+  roleId    String   @map("role_id") @db.Uuid
+  createdBy String?  @map("created_by") @db.Uuid
+  createdAt DateTime @default(示例公司有限公司()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  familyId   String    @map("family_id") @db.Uuid
+  tokenHash  String    @map("token_hash")
+  expiresAt  DateTime  @map("expires_at")
+  revokedAt  DateTime? @map("revoked_at")
+  replacedBy String?   @map("replaced_by") @db.Uuid
+  createdAt  DateTime  @default(示例公司有限公司()) @map("created_at")
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, familyId])
+  @@map("refresh_tokens")
+}
+
+model SystemSetting {
+  id             String                  @id @default(uuid()) @db.Uuid
+  organizationId String                  @map("organization_id") @db.Uuid
+  scope          String                  @default("GLOBAL")
+  key            String
+  value          Json
+  version        Int                     @default(1)
+  description    String?
+  createdBy      String?                 @map("created_by") @db.Uuid
+  createdAt      DateTime                @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+  organization   Organization            @relation(fields: [organizationId], references: [id])
+  revisions      SystemSettingRevision[]
+
+  @@unique([organizationId, scope, key])
+  @@map("system_settings")
+}
+
+model SystemSettingRevision {
+  id          String        @id @default(uuid()) @db.Uuid
+  settingId   String        @map("setting_id") @db.Uuid
+  version     Int
+  value       Json
+  changedById String?       @map("changed_by_id") @db.Uuid
+  reason      String
+  createdAt   DateTime      @default(示例公司有限公司()) @map("created_at")
+  setting     SystemSetting @relation(fields: [settingId], references: [id])
+
+  @@unique([settingId, version])
+  @@map("system_setting_revisions")
+}
+
+model Notification {
+  id         String           @id @default(uuid()) @db.Uuid
+  userId     String           @map("user_id") @db.Uuid
+  type       NotificationType
+  title      String
+  body       String
+  entityType String?          @map("entity_type")
+  entityId   String?          @map("entity_id")
+  data       Json?
+  dedupeKey  String?          @unique @map("dedupe_key")
+  readAt     DateTime?        @map("read_at")
+  createdAt  DateTime         @default(示例公司有限公司()) @map("created_at")
+  user       User             @relation(fields: [userId], references: [id])
+
+  @@index([userId, readAt, createdAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  actorId        String?      @map("actor_id") @db.Uuid
+  entityType     String       @map("entity_type")
+  entityId       String       @map("entity_id")
+  action         String
+  before         Json?
+  after          Json?
+  ip             String?
+  createdAt      DateTime     @default(示例公司有限公司()) @map("created_at")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  actor          User?        @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([organizationId, entityType, entityId])
+  @@index([organizationId, createdAt])
+  @@map("audit_logs")
+}
+
+model BusinessRequest {
+  id                String                @id @default(uuid()) @db.Uuid
+  organizationId    String                @map("organization_id") @db.Uuid
+  requesterId       String                @map("requester_id") @db.Uuid
+  linkedProjectId   String?               @unique @map("linked_project_id") @db.Uuid
+  title             String
+  problem           String
+  businessContext   String                @map("business_context")
+  expectedOutcome   String                @map("expected_outcome")
+  constraints       String?
+  status            BusinessRequestStatus @default(DRAFT)
+  diagnosis         Json?
+  createdAt         DateTime              @default(示例公司有限公司()) @map("created_at")
+  updatedAt         DateTime              @updatedAt @map("updated_at")
+  organization      Organization          @relation(fields: [organizationId], references: [id])
+  requester         User                  @relation(fields: [requesterId], references: [id])
+  linkedProject     Project?              @relation(fields: [linkedProjectId], references: [id])
+  workspaceSessions AIWorkspaceSession[]
+  knowledgeAssets   KnowledgeAsset[]
+
+  @@index([organizationId, requesterId, status])
+  @@map("business_requests")
+}
+
+model AIWorkspaceSession {
+  id              String               @id @default(uuid()) @db.Uuid
+  requestId       String               @map("request_id") @db.Uuid
+  createdById     String               @map("created_by_id") @db.Uuid
+  status          AIWorkspaceStatus    @default(ACTIVE)
+  provider        String?
+  model           String?
+  result          Json?
+  originalResult  Json?                @map("original_result")
+  confirmedResult Json?                @map("confirmed_result")
+  error           String?
+  createdAt       DateTime             @default(示例公司有限公司()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+  completedAt     DateTime?            @map("completed_at")
+  request         BusinessRequest      @relation(fields: [requestId], references: [id])
+  createdBy       User                 @relation(fields: [createdById], references: [id])
+  messages        AIWorkspaceMessage[]
+  knowledgeAssets KnowledgeAsset[]
+
+  @@index([requestId, createdAt])
+  @@map("ai_workspace_sessions")
+}
+
+model AIWorkspaceMessage {
+  id        String             @id @default(uuid()) @db.Uuid
+  sessionId String             @map("session_id") @db.Uuid
+  role      AIMessageRole
+  content   String
+  metadata  Json?
+  idempotencyKey  String?            @map("idempotency_key")
+  replyToId       String?            @map("reply_to_id") @db.Uuid
+  generationStatus AIGenerationStatus @default(NONE) @map("generation_status")
+  generationError String?            @map("generation_error")
+  provider        String?
+  model           String?
+  promptVersion   String?            @map("prompt_version")
+  latencyMs       Int?               @map("latency_ms")
+  createdAt DateTime           @default(示例公司有限公司()) @map("created_at")
+  session   AIWorkspaceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  replyTo   AIWorkspaceMessage?  @relation("WorkspaceMessageReplies", fields: [replyToId], references: [id])
+  replies   AIWorkspaceMessage[] @relation("WorkspaceMessageReplies")
+
+  @@index([sessionId, createdAt])
+  @@unique([sessionId, idempotencyKey])
+  @@index([replyToId])
+  @@map("ai_workspace_messages")
+}
+
+model KnowledgeAsset {
+  id             String                 @id @default(uuid()) @db.Uuid
+  organizationId String                 @map("organization_id") @db.Uuid
+  authorId       String                 @map("author_id") @db.Uuid
+  requestId      String?                @map("request_id") @db.Uuid
+  sessionId      String?                @map("session_id") @db.Uuid
+  title          String
+  summary        String
+  content        Json
+  assetType      KnowledgeAssetType     @default(PLAYBOOK) @map("asset_type")
+  sourceUrl      String?                @map("source_url")
+  usageCount     Int                    @default(0) @map("usage_count")
+  status         KnowledgeAssetStatus   @default(DRAFT)
+  createdAt      DateTime               @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime               @updatedAt @map("updated_at")
+  publishedAt    DateTime?              @map("published_at")
+  organization   Organization           @relation(fields: [organizationId], references: [id])
+  author         User                   @relation(fields: [authorId], references: [id])
+  request        BusinessRequest?       @relation(fields: [requestId], references: [id])
+  session        AIWorkspaceSession?    @relation(fields: [sessionId], references: [id])
+  reviews        KnowledgeAssetReview[]
+  usageEvents    KnowledgeAssetUsageEvent[]
+
+  @@index([organizationId, status, createdAt])
+  @@map("knowledge_assets")
+}
+
+model KnowledgeAssetUsageEvent {
+  id             String         @id @default(uuid()) @db.Uuid
+  assetId        String         @map("asset_id") @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  actorId        String         @map("actor_id") @db.Uuid
+  referenceType  String         @map("reference_type")
+  referenceId    String         @map("reference_id") @db.Uuid
+  idempotencyKey String         @map("idempotency_key")
+  createdAt      DateTime       @default(示例公司有限公司()) @map("created_at")
+  asset          KnowledgeAsset @relation(fields: [assetId], references: [id], onDelete: Restrict)
+
+  @@unique([assetId, referenceType, referenceId, idempotencyKey])
+  @@index([organizationId, createdAt])
+  @@map("knowledge_asset_usage_events")
+}
+
+model Opportunity {
+  id                    String                @id @default(uuid()) @db.Uuid
+  organizationId        String                @map("organization_id") @db.Uuid
+  publisherId           String                @map("publisher_id") @db.Uuid
+  publisherDepartmentId String?               @map("publisher_department_id") @db.Uuid
+  title                 String
+  description           String
+  valueTags             String[]              @default([]) @map("value_tags")
+  visibility            OpportunityVisibility @default(ORGANIZATION)
+  status                OpportunityStatus     @default(OPEN)
+  deadline              DateTime?
+  createdAt             DateTime              @default(示例公司有限公司()) @map("created_at")
+  updatedAt             DateTime              @updatedAt @map("updated_at")
+  proposals             OpportunityProposal[]
+  followers             OpportunityFollow[]
+  conversion            OpportunityConversion?
+  @@index([organizationId, status, createdAt])
+  @@map("opportunities")
+}
+
+model OpportunityFollow {
+  opportunityId String      @map("opportunity_id") @db.Uuid
+  userId        String      @map("user_id") @db.Uuid
+  createdAt     DateTime    @default(示例公司有限公司()) @map("created_at")
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  @@id([opportunityId, userId])
+  @@map("opportunity_follows")
+}
+
+model OpportunityProposal {
+  id            String                    @id @default(uuid()) @db.Uuid
+  opportunityId String                    @map("opportunity_id") @db.Uuid
+  proposerId    String                    @map("proposer_id") @db.Uuid
+  title         String
+  approach      String
+  expectedValue String                    @map("expected_value")
+  status        OpportunityProposalStatus @default(PENDING)
+  createdAt     DateTime                  @default(示例公司有限公司()) @map("created_at")
+  updatedAt     DateTime                  @updatedAt @map("updated_at")
+  opportunity   Opportunity               @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  conversion    OpportunityConversion?
+  @@index([opportunityId, proposerId])
+  @@index([opportunityId, status])
+  @@map("opportunity_proposals")
+}
+
+model OpportunityConversion {
+  id                String              @id @default(uuid()) @db.Uuid
+  opportunityId     String              @unique @map("opportunity_id") @db.Uuid
+  proposalId        String              @unique @map("proposal_id") @db.Uuid
+  businessRequestId String              @unique @map("business_request_id") @db.Uuid
+  convertedById     String              @map("converted_by_id") @db.Uuid
+  createdAt         DateTime            @default(示例公司有限公司()) @map("created_at")
+  opportunity       Opportunity         @relation(fields: [opportunityId], references: [id], onDelete: Restrict)
+  proposal          OpportunityProposal @relation(fields: [proposalId], references: [id], onDelete: Restrict)
+  @@map("opportunity_conversions")
+}
+
+model Circle {
+  id                    String            @id @default(uuid()) @db.Uuid
+  organizationId        String            @map("organization_id") @db.Uuid
+  ownerId               String            @map("owner_id") @db.Uuid
+  ownerDepartmentId     String?           @map("owner_department_id") @db.Uuid
+  title                 String
+  topic                 String
+  visibility            CircleVisibility  @default(ORGANIZATION)
+  status                CircleStatus      @default(OPEN)
+  opportunityId         String?           @map("opportunity_id") @db.Uuid
+  businessRequestId     String?           @map("business_request_id") @db.Uuid
+  projectId             String?           @map("project_id") @db.Uuid
+  closesAt              DateTime?         @map("closes_at")
+  createdAt             DateTime          @default(示例公司有限公司()) @map("created_at")
+  updatedAt             DateTime          @updatedAt @map("updated_at")
+  members               CircleMember[]
+  joinRequests          CircleJoinRequest[]
+  discussions           CircleDiscussion[]
+  @@index([organizationId, status, createdAt])
+  @@map("circles")
+}
+model CircleMember {
+  circleId  String           @map("circle_id") @db.Uuid
+  userId    String           @map("user_id") @db.Uuid
+  role      CircleMemberRole @default(MEMBER)
+  joinedAt  DateTime         @default(示例公司有限公司()) @map("joined_at")
+  leftAt    DateTime?        @map("left_at")
+  circle    Circle           @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  @@id([circleId, userId])
+  @@index([userId, leftAt])
+  @@map("circle_members")
+}
+model CircleJoinRequest {
+  id          String           @id @default(uuid()) @db.Uuid
+  circleId    String           @map("circle_id") @db.Uuid
+  applicantId String           @map("applicant_id") @db.Uuid
+  message     String?
+  status      CircleJoinStatus @default(PENDING)
+  reviewedById String?         @map("reviewed_by_id") @db.Uuid
+  createdAt   DateTime         @default(示例公司有限公司()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  circle      Circle           @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  @@unique([circleId, applicantId])
+  @@index([circleId, status])
+  @@map("circle_join_requests")
+}
+model CircleDiscussion {
+  id        String   @id @default(uuid()) @db.Uuid
+  circleId  String   @map("circle_id") @db.Uuid
+  authorId  String   @map("author_id") @db.Uuid
+  content   String
+  createdAt DateTime @default(示例公司有限公司()) @map("created_at")
+  circle    Circle   @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  @@index([circleId, createdAt])
+  @@map("circle_discussions")
+}
+
+model AIBuff {
+  id               String       @id @default(uuid()) @db.Uuid
+  organizationId   String       @map("organization_id") @db.Uuid
+  authorId         String       @map("author_id") @db.Uuid
+  knowledgeAssetId String       @map("knowledge_asset_id") @db.Uuid
+  name             String
+  description      String
+  type             AIBuffType
+  status           AIBuffStatus @default(DRAFT)
+  permissionCodes  String[]     @default([]) @map("permission_codes")
+  createdAt        DateTime     @default(示例公司有限公司()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+  versions         AIBuffVersion[]
+  runs             AIBuffRun[]
+  @@unique([organizationId, name])
+  @@index([organizationId, status, createdAt])
+  @@map("ai_buffs")
+}
+model AIBuffVersion {
+  id           String   @id @default(uuid()) @db.Uuid
+  buffId       String   @map("buff_id") @db.Uuid
+  version      Int
+  instructions String
+  inputSchema  Json     @map("input_schema")
+  createdById  String   @map("created_by_id") @db.Uuid
+  createdAt    DateTime @default(示例公司有限公司()) @map("created_at")
+  buff         AIBuff   @relation(fields: [buffId], references: [id], onDelete: Cascade)
+  runs         AIBuffRun[]
+  @@unique([buffId, version])
+  @@map("ai_buff_versions")
+}
+model AIBuffRun {
+  id             String          @id @default(uuid()) @db.Uuid
+  organizationId String          @map("organization_id") @db.Uuid
+  buffId         String          @map("buff_id") @db.Uuid
+  versionId      String          @map("version_id") @db.Uuid
+  callerId       String          @map("caller_id") @db.Uuid
+  contextType    String?         @map("context_type")
+  contextId      String?         @map("context_id") @db.Uuid
+  input          Json
+  output         Json?
+  status         AIBuffRunStatus @default(QUEUED)
+  provider       String?
+  model          String?
+  inputTokens    Int?            @map("input_tokens")
+  outputTokens   Int?            @map("output_tokens")
+  costMicros     Int?            @map("cost_micros")
+  latencyMs      Int?            @map("latency_ms")
+  attempts       Int             @default(0)
+  error          String?
+  idempotencyKey String          @map("idempotency_key")
+  createdAt      DateTime        @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  buff           AIBuff          @relation(fields: [buffId], references: [id], onDelete: Restrict)
+  version        AIBuffVersion   @relation(fields: [versionId], references: [id], onDelete: Restrict)
+  @@unique([callerId, idempotencyKey])
+  @@index([organizationId, status, createdAt])
+  @@map("ai_buff_runs")
+}
+
+model KnowledgeAssetReview {
+  id         String           @id @default(uuid()) @db.Uuid
+  assetId    String           @map("asset_id") @db.Uuid
+  reviewerId String           @map("reviewer_id") @db.Uuid
+  stage      ApprovalStage
+  decision   ApprovalDecision
+  comment    String?
+  createdAt  DateTime         @default(示例公司有限公司()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+  asset      KnowledgeAsset   @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  reviewer   User             @relation(fields: [reviewerId], references: [id])
+
+  @@unique([assetId, stage])
+  @@index([reviewerId, createdAt])
+  @@map("knowledge_asset_reviews")
+}
+
+model Skill {
+  id             String                 @id @default(uuid()) @db.Uuid
+  organizationId String                 @map("organization_id") @db.Uuid
+  name           String
+  category       String?
+  createdAt      DateTime               @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime               @updatedAt @map("updated_at")
+  organization   Organization           @relation(fields: [organizationId], references: [id])
+  projects       ProjectRequiredSkill[]
+  employees      EmployeeSkill[]
+  evidence       ProjectSkillEvidence[]
+
+  @@unique([organizationId, name])
+  @@map("skills")
+}
+
+model Project {
+  id                       String                   @id @default(uuid()) @db.Uuid
+  organizationId           String                   @map("organization_id") @db.Uuid
+  publisherId              String                   @map("publisher_id") @db.Uuid
+  publisherDepartmentId    String                   @map("publisher_department_id") @db.Uuid
+  ownerId                  String?                  @map("owner_id") @db.Uuid
+  supervisorId             String?                  @map("supervisor_id") @db.Uuid
+  title                    String
+  description              String
+  businessProblem          String                   @map("business_problem")
+  expectedResult           String                   @map("expected_result")
+  acceptanceCriteria       String                   @map("acceptance_criteria")
+  projectLevel             ProjectLevel?            @map("project_level")
+  requiredCapabilityLevel  CapabilityLevel?         @map("required_capability_level")
+  businessValueScore       Int?                     @map("business_value_score")
+  technicalComplexityScore Int?                     @map("technical_complexity_score")
+  urgencyScore             Int?                     @map("urgency_score")
+  estimatedHours           Decimal?                 @map("estimated_hours") @db.Decimal(10, 2)
+  approvedHours            Decimal?                 @map("approved_hours") @db.Decimal(10, 2)
+  deadline                 DateTime?
+  baseBonus                Decimal?                 @map("base_bonus") @db.Decimal(12, 2)
+  finalBonus               Decimal?                 @map("final_bonus") @db.Decimal(12, 2)
+  status                   ProjectStatus            @default(DRAFT)
+  version                  Int                      @default(1)
+  aiExecutionRatio         Int                      @default(0) @map("ai_execution_ratio")
+  objective                String?
+  createdBy                String?                  @map("created_by") @db.Uuid
+  createdAt                DateTime                 @default(示例公司有限公司()) @map("created_at")
+  updatedAt                DateTime                 @updatedAt @map("updated_at")
+  approvedAt               DateTime?                @map("approved_at")
+  startedAt                DateTime?                @map("started_at")
+  deliveredAt              DateTime?                @map("delivered_at")
+  completedAt              DateTime?                @map("completed_at")
+  organization             Organization             @relation(fields: [organizationId], references: [id])
+  publisher                User                     @relation("ProjectPublisher", fields: [publisherId], references: [id])
+  publisherDepartment      Department               @relation(fields: [publisherDepartmentId], references: [id])
+  owner                    User?                    @relation("ProjectOwner", fields: [ownerId], references: [id])
+  supervisor               User?                    @relation("ProjectSupervisor", fields: [supervisorId], references: [id])
+  requiredSkills           ProjectRequiredSkill[]
+  approvals                ProjectApproval[]
+  aiAssessments            AIAssessment[]
+  applications             ProjectApplication[]
+  members                  ProjectMember[]
+  milestones               ProjectMilestone[]
+  timelineNodes            ProjectTimelineNode[]
+  progressLogs             ProjectProgressLog[]
+  healthSnapshots          ProjectHealthSnapshot[]
+  riskActions              ProjectRiskAction[]
+  deliveries               ProjectDelivery[]
+  deliveryAcceptances      DeliveryAcceptance[]
+  rating                   ProjectRating?
+  contributions            ProjectContribution[]
+  contributionDisputes     ContributionDispute[]
+  bonusLedgers             BonusLedger[]
+  reputationEvents         ReputationEvent[]
+  capabilityHistory        CapabilityLevelHistory[]
+  skillEvidence            ProjectSkillEvidence[]
+  businessRequest          BusinessRequest?
+  plans                    ProjectPlan[]
+  teamInvitations          ProjectTeamInvitation[]
+
+  @@index([organizationId, status])
+  @@index([organizationId, updatedAt])
+  @@map("projects")
+}
+
+model ProjectRequiredSkill {
+  projectId String  @map("project_id") @db.Uuid
+  skillId   String  @map("skill_id") @db.Uuid
+  weight    Int     @default(1)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  skill     Skill   @relation(fields: [skillId], references: [id])
+
+  @@id([projectId, skillId])
+  @@map("project_required_skills")
+}
+
+model ProjectApproval {
+  id         String           @id @default(uuid()) @db.Uuid
+  projectId  String           @map("project_id") @db.Uuid
+  reviewerId String           @map("reviewer_id") @db.Uuid
+  stage      ApprovalStage
+  decision   ApprovalDecision
+  comment    String?
+  projectVersion Int              @map("project_version")
+  createdAt  DateTime         @default(示例公司有限公司()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+  project    Project          @relation(fields: [projectId], references: [id])
+  reviewer   User             @relation(fields: [reviewerId], references: [id])
+
+  @@unique([projectId, stage, projectVersion])
+  @@index([projectId, createdAt])
+  @@map("project_approvals")
+}
+
+model AIAssessment {
+  id            String             @id @default(uuid()) @db.Uuid
+  projectId     String             @map("project_id") @db.Uuid
+  type          AIAssessmentType
+  status        AIAssessmentStatus
+  provider      String
+  model         String
+  promptVersion String             @map("prompt_version")
+  inputSnapshot Json               @map("input_snapshot")
+  output        Json?
+  confidence    Decimal?           @db.Decimal(5, 4)
+  error         String?
+  attempts      Int                @default(0)
+  lastAttemptAt DateTime?          @map("last_attempt_at")
+  createdAt     DateTime           @default(示例公司有限公司()) @map("created_at")
+  project       Project            @relation(fields: [projectId], references: [id])
+
+  @@index([projectId, type])
+  @@map("ai_assessments")
+}
+
+model EmployeeSkill {
+  id                 String                  @id @default(uuid()) @db.Uuid
+  userId             String                  @map("user_id") @db.Uuid
+  skillId            String                  @map("skill_id") @db.Uuid
+  proficiency        Int                     @default(1)
+  evidence           String?
+  verificationStatus SkillVerificationStatus @default(SELF_DECLARED) @map("verification_status")
+  verifiedById       String?                 @map("verified_by_id") @db.Uuid
+  verifiedAt         DateTime?               @map("verified_at")
+  verifiedProjectId  String?                 @map("verified_project_id") @db.Uuid
+  createdAt          DateTime                @default(示例公司有限公司()) @map("created_at")
+  updatedAt          DateTime                @updatedAt @map("updated_at")
+  user               User                    @relation(fields: [userId], references: [id])
+  skill              Skill                   @relation(fields: [skillId], references: [id])
+  verifiedBy         User?                   @relation("SkillVerifier", fields: [verifiedById], references: [id])
+
+  @@unique([userId, skillId])
+  @@map("employee_skills")
+}
+
+model CapabilityLevelHistory {
+  id           String          @id @default(uuid()) @db.Uuid
+  userId       String          @map("user_id") @db.Uuid
+  oldLevel     CapabilityLevel @map("old_level")
+  newLevel     CapabilityLevel @map("new_level")
+  projectId    String?         @map("project_id") @db.Uuid
+  reason       String
+  approvedById String?         @map("approved_by_id") @db.Uuid
+  ruleVersion  String?         @map("rule_version")
+  evidence     Json?
+  createdAt    DateTime        @default(示例公司有限公司()) @map("created_at")
+  user         User            @relation("CapabilityEmployee", fields: [userId], references: [id])
+  project      Project?        @relation(fields: [projectId], references: [id])
+  approvedBy   User?           @relation("CapabilityApprover", fields: [approvedById], references: [id])
+
+  @@index([userId, createdAt])
+  @@unique([userId, projectId])
+  @@map("capability_level_history")
+}
+
+model ProjectSkillEvidence {
+  id                     String              @id @default(uuid()) @db.Uuid
+  evidenceKey            String              @unique @map("evidence_key")
+  organizationId         String              @map("organization_id") @db.Uuid
+  projectId              String              @map("project_id") @db.Uuid
+  userId                 String              @map("user_id") @db.Uuid
+  skillId                String              @map("skill_id") @db.Uuid
+  contributionPercentage Decimal             @map("contribution_percentage") @db.Decimal(5, 2)
+  grade                  ProjectGrade
+  status                 SkillEvidenceStatus @default(PENDING)
+  reviewerId             String?             @map("reviewer_id") @db.Uuid
+  reviewReason           String?             @map("review_reason")
+  reviewedAt             DateTime?           @map("reviewed_at")
+  createdAt              DateTime            @default(示例公司有限公司()) @map("created_at")
+  updatedAt              DateTime            @updatedAt @map("updated_at")
+  project                Project             @relation(fields: [projectId], references: [id])
+  user                   User                @relation("SkillEvidenceEmployee", fields: [userId], references: [id])
+  skill                  Skill               @relation(fields: [skillId], references: [id])
+  reviewer               User?               @relation("SkillEvidenceReviewer", fields: [reviewerId], references: [id])
+
+  @@unique([projectId, userId, skillId])
+  @@index([organizationId, status, createdAt])
+  @@index([userId, createdAt])
+  @@map("project_skill_evidence")
+}
+
+model EmployeeCapacity {
+  id             String         @id @default(uuid()) @db.Uuid
+  userId         String         @map("user_id") @db.Uuid
+  periodStart    DateTime       @map("period_start")
+  periodEnd      DateTime       @map("period_end")
+  availableHours Decimal        @map("available_hours") @db.Decimal(8, 2)
+  allocatedHours Decimal        @default(0) @map("allocated_hours") @db.Decimal(8, 2)
+  status         CapacityStatus @default(AVAILABLE)
+  note           String?
+  createdAt      DateTime       @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  user           User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, periodStart, periodEnd])
+  @@index([userId, status])
+  @@map("employee_capacities")
+}
+
+model ProjectApplication {
+  id                  String                   @id @default(uuid()) @db.Uuid
+  projectId           String                   @map("project_id") @db.Uuid
+  applicantId         String                   @map("applicant_id") @db.Uuid
+  motivation          String
+  estimatedHours      Decimal                  @map("estimated_hours") @db.Decimal(8, 2)
+  relevantExperience  String                   @map("relevant_experience")
+  note                String?
+  matchingScore       Decimal                  @map("matching_score") @db.Decimal(5, 2)
+  matchingBreakdown   Json                     @map("matching_breakdown")
+  status              ProjectApplicationStatus @default(PENDING)
+  specialReviewReason String?                  @map("special_review_reason")
+  decidedById         String?                  @map("decided_by_id") @db.Uuid
+  decidedAt           DateTime?                @map("decided_at")
+  decisionNote        String?                  @map("decision_note")
+  createdAt           DateTime                 @default(示例公司有限公司()) @map("created_at")
+  updatedAt           DateTime                 @updatedAt @map("updated_at")
+  project             Project                  @relation(fields: [projectId], references: [id])
+  applicant           User                     @relation("ApplicationApplicant", fields: [applicantId], references: [id])
+  decidedBy           User?                    @relation("ApplicationDecision", fields: [decidedById], references: [id])
+
+  @@index([projectId, applicantId])
+  @@index([projectId, status])
+  @@map("project_applications")
+}
+
+model ProjectMember {
+  id        String            @id @default(uuid()) @db.Uuid
+  projectId String            @map("project_id") @db.Uuid
+  userId    String            @map("user_id") @db.Uuid
+  role      ProjectMemberRole
+  joinedAt  DateTime          @default(示例公司有限公司()) @map("joined_at")
+  leftAt    DateTime?         @map("left_at")
+  createdBy String?           @map("created_by") @db.Uuid
+  createdAt DateTime          @default(示例公司有限公司()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+  project   Project           @relation(fields: [projectId], references: [id])
+  user      User              @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+  @@index([projectId, role])
+  @@map("project_members")
+}
+
+model ProjectPlan {
+  id            String            @id @default(uuid()) @db.Uuid
+  projectId     String            @map("project_id") @db.Uuid
+  version       Int
+  objective     String
+  status        ProjectPlanStatus @default(DRAFT)
+  submittedAt   DateTime?         @map("submitted_at")
+  confirmedAt   DateTime?         @map("confirmed_at")
+  confirmedById String?           @map("confirmed_by_id") @db.Uuid
+  createdBy     String            @map("created_by") @db.Uuid
+  createdAt     DateTime          @default(示例公司有限公司()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+  project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  confirmedBy   User?             @relation("PlanConfirmer", fields: [confirmedById], references: [id])
+  milestones    ProjectMilestone[]
+
+  @@unique([projectId, version])
+  @@index([projectId, status])
+  @@map("project_plans")
+}
+
+model ProjectTeamInvitation {
+  id          String               @id @default(uuid()) @db.Uuid
+  projectId   String               @map("project_id") @db.Uuid
+  userId      String               @map("user_id") @db.Uuid
+  role        ProjectMemberRole
+  status      TeamInvitationStatus @default(PENDING)
+  invitedById String               @map("invited_by_id") @db.Uuid
+  respondedAt DateTime?            @map("responded_at")
+  createdAt   DateTime             @default(示例公司有限公司()) @map("created_at")
+  updatedAt   DateTime             @updatedAt @map("updated_at")
+  project     Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user        User                 @relation("InvitationRecipient", fields: [userId], references: [id])
+  invitedBy   User                 @relation("InvitationSender", fields: [invitedById], references: [id])
+
+  @@index([projectId, status])
+  @@index([userId, status])
+  @@map("project_team_invitations")
+}
+
+model ProjectTimelineNode {
+  id          String          @id @default(uuid()) @db.Uuid
+  projectId   String          @map("project_id") @db.Uuid
+  defaultKey  String?         @map("default_key")
+  title       String
+  description String          @default("")
+  scheduledAt DateTime?       @map("scheduled_at")
+  status      MilestoneStatus @default(PENDING)
+  createdBy   String          @map("created_by") @db.Uuid
+  createdAt   DateTime        @default(示例公司有限公司()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  project     Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, defaultKey])
+  @@index([projectId, scheduledAt])
+  @@map("project_timeline_nodes")
+}
+
+model ProjectMilestone {
+  id                  String          @id @default(uuid()) @db.Uuid
+  projectId           String          @map("project_id") @db.Uuid
+  planId              String?         @map("plan_id") @db.Uuid
+  title               String
+  description         String
+  dueAt               DateTime        @map("due_at")
+  weight              Decimal         @db.Decimal(5, 2)
+  expectedDeliverable String          @map("expected_deliverable")
+  status              MilestoneStatus @default(PENDING)
+  completedAt         DateTime?       @map("completed_at")
+  createdBy           String          @map("created_by") @db.Uuid
+  createdAt           DateTime        @default(示例公司有限公司()) @map("created_at")
+  updatedAt           DateTime        @updatedAt @map("updated_at")
+  project             Project         @relation(fields: [projectId], references: [id])
+  plan                ProjectPlan?    @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, dueAt])
+  @@map("project_milestones")
+}
+
+model ProjectProgressLog {
+  id              String   @id @default(uuid()) @db.Uuid
+  projectId       String   @map("project_id") @db.Uuid
+  authorId        String   @map("author_id") @db.Uuid
+  progressPercent Int      @map("progress_percent")
+  summary         String
+  blockers        String?
+  riskLevel       Int      @map("risk_level")
+  nextAction      String   @map("next_action")
+  createdAt       DateTime @default(示例公司有限公司()) @map("created_at")
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId, createdAt])
+  @@map("project_progress_logs")
+}
+
+model ProjectHealthSnapshot {
+  id           String              @id @default(uuid()) @db.Uuid
+  projectId    String              @map("project_id") @db.Uuid
+  timeProgress Decimal             @map("time_progress") @db.Decimal(5, 2)
+  workProgress Decimal             @map("work_progress") @db.Decimal(5, 2)
+  score        Int
+  status       ProjectHealthStatus
+  reason       Json
+  createdAt    DateTime            @default(示例公司有限公司()) @map("created_at")
+  project      Project             @relation(fields: [projectId], references: [id])
+
+  @@index([projectId, createdAt])
+  @@map("project_health_snapshots")
+}
+
+model ProjectRiskAction {
+  id              String    @id @default(uuid()) @db.Uuid
+  projectId       String    @map("project_id") @db.Uuid
+  supervisorId    String    @map("supervisor_id") @db.Uuid
+  reason          String
+  remediationPlan String    @map("remediation_plan")
+  dueAt           DateTime  @map("due_at")
+  resolvedAt      DateTime? @map("resolved_at")
+  createdAt       DateTime  @default(示例公司有限公司()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  project         Project   @relation(fields: [projectId], references: [id])
+
+  @@index([projectId, resolvedAt])
+  @@map("project_risk_actions")
+}
+
+model ProjectDelivery {
+  id            String          @id @default(uuid()) @db.Uuid
+  projectId     String          @map("project_id") @db.Uuid
+  version       Int
+  type          DeliverableType
+  title         String
+  content       String?
+  url           String?
+  storageKey    String?         @map("storage_key")
+  changeSummary String          @map("change_summary")
+  submittedById String          @map("submitted_by_id") @db.Uuid
+  createdAt     DateTime        @default(示例公司有限公司()) @map("created_at")
+  project       Project         @relation(fields: [projectId], references: [id])
+  submittedBy   User            @relation(fields: [submittedById], references: [id])
+  acceptances   DeliveryAcceptance[]
+
+  @@unique([projectId, version])
+  @@index([projectId, createdAt])
+  @@map("project_deliveries")
+}
+
+model DeliveryAcceptance {
+  id         String             @id @default(uuid()) @db.Uuid
+  projectId  String             @map("project_id") @db.Uuid
+  deliveryId String             @map("delivery_id") @db.Uuid
+  reviewerId String             @map("reviewer_id") @db.Uuid
+  role       AcceptanceRole
+  decision   AcceptanceDecision
+  score      Int
+  comment    String
+  createdAt  DateTime           @default(示例公司有限公司()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+  project    Project            @relation(fields: [projectId], references: [id])
+  delivery   ProjectDelivery    @relation(fields: [deliveryId], references: [id])
+  reviewer   User               @relation("AcceptanceReviewer", fields: [reviewerId], references: [id])
+
+  @@unique([deliveryId, role])
+  @@index([projectId, decision])
+  @@map("delivery_acceptances")
+}
+
+model ProjectRating {
+  id                            String       @id @default(uuid()) @db.Uuid
+  projectId                     String       @unique @map("project_id") @db.Uuid
+  publisherBusinessScore        Int          @map("publisher_business_score")
+  departmentHeadBusinessScore   Int          @map("department_head_business_score")
+  aiTechnicalScore              Int          @map("ai_technical_score")
+  ownerManagerTechnicalScore    Int          @map("owner_manager_technical_score")
+  projectManagementScore        Int          @map("project_management_score")
+  finalScore                    Int          @map("final_score")
+  grade                         ProjectGrade
+  breakdown                     Json
+  requiresExecutiveConfirmation Boolean      @map("requires_executive_confirmation")
+  confirmedById                 String?      @map("confirmed_by_id") @db.Uuid
+  confirmedAt                   DateTime?    @map("confirmed_at")
+  confirmationNote              String?      @map("confirmation_note")
+  createdAt                     DateTime     @default(示例公司有限公司()) @map("created_at")
+  updatedAt                     DateTime     @updatedAt @map("updated_at")
+  project                       Project      @relation(fields: [projectId], references: [id])
+  confirmedBy                   User?        @relation("RatingConfirmer", fields: [confirmedById], references: [id])
+
+  @@index([grade, confirmedAt])
+  @@map("project_ratings")
+}
+
+model BonusRule {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  projectLevel   ProjectLevel @map("project_level")
+  hourlyRate     Decimal      @map("hourly_rate") @db.Decimal(12, 2)
+  minHours       Decimal      @map("min_hours") @db.Decimal(8, 2)
+  maxHours       Decimal      @map("max_hours") @db.Decimal(8, 2)
+  sMultiplier    Decimal      @map("s_multiplier") @db.Decimal(5, 2)
+  aMultiplier    Decimal      @map("a_multiplier") @db.Decimal(5, 2)
+  bMultiplier    Decimal      @map("b_multiplier") @db.Decimal(5, 2)
+  cMultiplier    Decimal      @map("c_multiplier") @db.Decimal(5, 2)
+  failMultiplier Decimal      @map("fail_multiplier") @db.Decimal(5, 2)
+  effectiveFrom  DateTime     @map("effective_from")
+  effectiveTo    DateTime?    @map("effective_to")
+  createdAt      DateTime     @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([organizationId, projectLevel, effectiveFrom])
+  @@index([organizationId, projectLevel, effectiveFrom])
+  @@map("bonus_rules")
+}
+
+model ProjectContribution {
+  id                 String             @id @default(uuid()) @db.Uuid
+  projectId          String             @map("project_id") @db.Uuid
+  userId             String             @map("user_id") @db.Uuid
+  proposedById       String             @map("proposed_by_id") @db.Uuid
+  proposedPercentage Decimal            @map("proposed_percentage") @db.Decimal(5, 2)
+  proposalVersion    Int                @default(1) @map("proposal_version")
+  finalPercentage    Decimal?           @map("final_percentage") @db.Decimal(5, 2)
+  status             ContributionStatus @default(PENDING)
+  confirmedAt        DateTime?          @map("confirmed_at")
+  supersededAt       DateTime?          @map("superseded_at")
+  createdAt          DateTime           @default(示例公司有限公司()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  project            Project            @relation(fields: [projectId], references: [id])
+  user               User               @relation("ContributionUser", fields: [userId], references: [id])
+  proposedBy         User               @relation("ContributionProposer", fields: [proposedById], references: [id])
+
+  @@unique([projectId, userId, proposalVersion])
+  @@index([projectId, status])
+  @@index([projectId, proposalVersion, supersededAt])
+  @@map("project_contributions")
+}
+
+model ContributionDispute {
+  id                 String                    @id @default(uuid()) @db.Uuid
+  projectId          String                    @map("project_id") @db.Uuid
+  raisedById         String                    @map("raised_by_id") @db.Uuid
+  reason             String
+  originalAllocation Json                      @map("original_allocation")
+  finalAllocation    Json?                     @map("final_allocation")
+  status             ContributionDisputeStatus @default(OPEN)
+  arbitratorId       String?                   @map("arbitrator_id") @db.Uuid
+  resolution         String?
+  resolvedAt         DateTime?                 @map("resolved_at")
+  createdAt          DateTime                  @default(示例公司有限公司()) @map("created_at")
+  updatedAt          DateTime                  @updatedAt @map("updated_at")
+  project            Project                   @relation(fields: [projectId], references: [id])
+  raisedBy           User                      @relation("DisputeRaiser", fields: [raisedById], references: [id])
+  arbitrator         User?                     @relation("DisputeArbitrator", fields: [arbitratorId], references: [id])
+
+  @@index([projectId, status])
+  @@map("contribution_disputes")
+}
+
+model SettlementBatch {
+  id              String                @id @default(uuid()) @db.Uuid
+  organizationId  String                @map("organization_id") @db.Uuid
+  settlementMonth DateTime              @map("settlement_month") @db.Date
+  status          SettlementBatchStatus @default(LOCKED)
+  totalAmount     Decimal               @map("total_amount") @db.Decimal(14, 2)
+  lockedById      String?               @map("locked_by_id") @db.Uuid
+  lockedAt        DateTime              @default(示例公司有限公司()) @map("locked_at")
+  paidAt          DateTime?             @map("paid_at")
+  ledgers         BonusLedger[]
+
+  @@unique([organizationId, settlementMonth])
+  @@map("settlement_batches")
+}
+
+model BonusLedger {
+  id                     String            @id @default(uuid()) @db.Uuid
+  organizationId         String            @map("organization_id") @db.Uuid
+  projectId              String            @map("project_id") @db.Uuid
+  userId                 String            @map("user_id") @db.Uuid
+  settlementBatchId      String?           @map("settlement_batch_id") @db.Uuid
+  amount                 Decimal           @db.Decimal(12, 2)
+  contributionPercentage Decimal           @map("contribution_percentage") @db.Decimal(5, 2)
+  status                 BonusLedgerStatus @default(PENDING)
+  settlementMonth        DateTime          @map("settlement_month") @db.Date
+  lockedAt               DateTime?         @map("locked_at")
+  paidAt                 DateTime?         @map("paid_at")
+  createdAt              DateTime          @default(示例公司有限公司()) @map("created_at")
+  updatedAt              DateTime          @updatedAt @map("updated_at")
+  project                Project           @relation(fields: [projectId], references: [id])
+  user                   User              @relation(fields: [userId], references: [id])
+  batch                  SettlementBatch?  @relation(fields: [settlementBatchId], references: [id])
+
+  @@unique([projectId, userId])
+  @@index([organizationId, settlementMonth, status])
+  @@map("bonus_ledgers")
+}
+
+model ReputationEvent {
+  id          String              @id @default(uuid()) @db.Uuid
+  userId      String              @map("user_id") @db.Uuid
+  projectId   String?             @map("project_id") @db.Uuid
+  type        ReputationEventType
+  delta       Int
+  scoreBefore Int                 @map("score_before")
+  scoreAfter  Int                 @map("score_after")
+  metadata    Json?
+  createdAt   DateTime            @default(示例公司有限公司()) @map("created_at")
+  user        User                @relation(fields: [userId], references: [id])
+  project     Project?            @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId, type])
+  @@index([userId, createdAt])
+  @@map("reputation_events")
+}
+
+model UserRestriction {
+  id        String              @id @default(uuid()) @db.Uuid
+  userId    String              @map("user_id") @db.Uuid
+  type      UserRestrictionType
+  value     Json
+  reason    String
+  startsAt  DateTime            @default(示例公司有限公司()) @map("starts_at")
+  endsAt    DateTime            @map("ends_at")
+  createdAt DateTime            @default(示例公司有限公司()) @map("created_at")
+  user      User                @relation(fields: [userId], references: [id])
+
+  @@index([userId, endsAt])
+  @@map("user_restrictions")
+}
+
+enum PersonalProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  PAUSED
+  DONE
+}
+
+/// A self-managed project an employee uses to track their own progress.
+model TeamWorkState {
+  organizationId String   @id @map("organization_id") @db.Uuid
+  data           Json
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("team_work_states")
+}
+
+model PersonalProject {
+  id             String                  @id @default(uuid()) @db.Uuid
+  organizationId String                  @map("organization_id") @db.Uuid
+  ownerId        String                  @map("owner_id") @db.Uuid
+  title          String
+  description    String                  @default("")
+  status         PersonalProjectStatus   @default(PLANNING)
+  progress       Int                     @default(0)
+  startDate      DateTime?               @map("start_date")
+  dueDate        DateTime?               @map("due_date")
+  createdAt      DateTime                @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+  tasks          PersonalProjectTask[]
+  updates        PersonalProjectUpdate[]
+
+  @@index([organizationId, ownerId, updatedAt])
+  @@map("personal_projects")
+}
+
+model PersonalProjectTask {
+  id        String          @id @default(uuid()) @db.Uuid
+  projectId String          @map("project_id") @db.Uuid
+  title     String
+  done      Boolean         @default(false)
+  dueDate   DateTime?       @map("due_date")
+  sortOrder Int             @default(0) @map("sort_order")
+  createdAt DateTime        @default(示例公司有限公司()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+  project   PersonalProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, sortOrder])
+  @@map("personal_project_tasks")
+}
+
+model PersonalProjectUpdate {
+  id        String          @id @default(uuid()) @db.Uuid
+  projectId String          @map("project_id") @db.Uuid
+  content   String
+  progress  Int?
+  createdAt DateTime        @default(示例公司有限公司()) @map("created_at")
+  project   PersonalProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt])
+  @@map("personal_project_updates")
+}
+
+enum TraineeSubmissionStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum TraineeReviewDecision {
+  APPROVED
+  REJECTED
+}
+
+model TraineeProfile {
+  id             String @id @default(uuid()) @db.Uuid
+  userId         String @unique @map("user_id") @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  mentorId       String? @map("mentor_id") @db.Uuid
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  user           User @relation("TraineeUser", fields: [userId], references: [id], onDelete: Restrict)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  mentor         User? @relation("TraineeMentor", fields: [mentorId], references: [id], onDelete: Restrict)
+  submissions    TraineeSubmission[]
+  growthPlans    TraineeGrowthPlan[]
+  labelingEntries TraineeLabelingEntry[]
+  labelingTianjiIdentity TraineeLabelingTianjiIdentity?
+
+  @@index([organizationId, mentorId])
+  @@map("trainee_profiles")
+}
+
+model TraineeLabelingEntry {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  traineeId      String   @map("trainee_id") @db.Uuid
+  workDate       DateTime @map("work_date") @db.Date
+  count          Int
+  version        Int      @default(1)
+  source         String
+  note           String   @default("")
+  updatedBy      String   @map("updated_by") @db.Uuid
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  trainee        TraineeProfile @relation(fields: [traineeId], references: [userId], onDelete: Restrict)
+
+  @@unique([organizationId, traineeId, workDate], map: "labeling_entry_org_trainee_date_key")
+  @@index([organizationId, workDate], map: "labeling_entry_org_date_idx")
+  @@map("trainee_labeling_entries")
+}
+
+model TraineeLabelingImport {
+  organizationId String @map("organization_id") @db.Uuid
+  requestId      String @map("request_id") @db.Uuid
+  payloadHash    String @map("payload_hash")
+  result         Json
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+
+  @@id([organizationId, requestId])
+  @@map("trainee_labeling_imports")
+}
+
+model TraineeLabelingTianjiIdentity {
+  traineeId String @id @map("trainee_id") @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  employeeId Int @map("employee_id")
+  employeeName String @map("employee_name")
+  boundBy String @map("bound_by") @db.Uuid
+  createdAt DateTime @default(示例公司有限公司()) @map("created_at")
+  trainee TraineeProfile @relation(fields: [traineeId], references: [userId], onDelete: Restrict)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  days TraineeLabelingTianjiDay[]
+
+  @@unique([organizationId, employeeId], map: "labeling_identity_org_employee_key")
+  @@map("trainee_labeling_tianji_identities")
+}
+
+model TraineeLabelingTianjiDay {
+  id String @id @default(uuid()) @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  traineeId String @map("trainee_id") @db.Uuid
+  workDate DateTime @map("work_date") @db.Date
+  count Int
+  syncId String @map("sync_id") @db.Uuid
+  updatedAt DateTime @updatedAt @map("updated_at")
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  identity TraineeLabelingTianjiIdentity @relation(fields: [traineeId], references: [traineeId], onDelete: Restrict)
+
+  @@unique([organizationId, traineeId, workDate], map: "labeling_tianji_day_org_trainee_date_key")
+  @@index([organizationId, workDate], map: "labeling_tianji_day_org_date_idx")
+  @@map("trainee_labeling_tianji_days")
+}
+
+model TraineeLabelingSync {
+  id String @id @default(uuid()) @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  actorId String @map("actor_id") @db.Uuid
+  from DateTime @db.Date
+  to DateTime @db.Date
+  status String @default("QUEUED")
+  message String @default("")
+  processed Int @default(0)
+  result Json?
+  leaseUntil DateTime? @map("lease_until")
+  workerKey String? @map("worker_key") @db.Uuid
+  createdAt DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  finishedAt DateTime? @map("finished_at")
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+
+  @@index([organizationId, status], map: "labeling_sync_org_status_idx")
+  @@index([status, leaseUntil], map: "labeling_sync_status_lease_idx")
+  @@map("trainee_labeling_syncs")
+}
+
+model TraineeSubmission {
+  id             String @id @default(uuid()) @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  traineeId      String @map("trainee_id") @db.Uuid
+  departmentId   String @map("department_id") @db.Uuid
+  workDate       DateTime @map("work_date") @db.Date
+  title          String
+  problem        String
+  solution       String
+  expectedValue  String? @map("expected_value")
+  status         TraineeSubmissionStatus @default(DRAFT)
+  version        Int @default(1)
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  trainee        TraineeProfile @relation(fields: [traineeId], references: [userId], onDelete: Restrict)
+  department     Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  reviews        TraineeReview[]
+
+  @@index([organizationId, workDate, status])
+  @@index([traineeId, workDate])
+  @@map("trainee_submissions")
+}
+
+model TraineeReview {
+  id             String @id @default(uuid()) @db.Uuid
+  submissionId   String @map("submission_id") @db.Uuid
+  reviewerId     String @map("reviewer_id") @db.Uuid
+  decision       TraineeReviewDecision
+  comment        String?
+  version        Int
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  submission     TraineeSubmission @relation(fields: [submissionId], references: [id], onDelete: Restrict)
+  reviewer       User @relation(fields: [reviewerId], references: [id], onDelete: Restrict)
+
+  @@unique([submissionId, version])
+  @@map("trainee_reviews")
+}
+
+model TraineeGrowthPlan {
+  id              String @id @default(uuid()) @db.Uuid
+  organizationId  String @map("organization_id") @db.Uuid
+  traineeId       String @map("trainee_id") @db.Uuid
+  periodStart     DateTime @map("period_start") @db.Date
+  periodEnd       DateTime @map("period_end") @db.Date
+  rating          String?
+  departmentText  String @default("") @map("department_text")
+  workResults     String @default("") @map("work_results")
+  strengths       String @default("")
+  shortfalls      String @default("")
+  growthAdvice    String @default("") @map("growth_advice")
+  nextAssessment  String @default("") @map("next_assessment")
+  archiveComment  String @default("") @map("archive_comment")
+  status          String @default("DRAFT")
+  version         Int @default(1)
+  createdBy       String @map("created_by") @db.Uuid
+  updatedBy       String @map("updated_by") @db.Uuid
+  publishedAt     DateTime? @map("published_at")
+  analysisRequestKey String? @map("analysis_request_key") @db.Uuid
+  analysisStartedAt DateTime? @map("analysis_started_at")
+  createdAt       DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  trainee         TraineeProfile @relation(fields: [traineeId], references: [userId], onDelete: Restrict)
+  revisions       TraineeGrowthRevision[]
+  sources         TraineeGrowthSource[]
+  @@unique([traineeId, periodStart])
+  @@index([organizationId, traineeId, periodStart])
+  @@map("trainee_growth_plans")
+}
+
+model TraineeGrowthRevision {
+  id          String @id @default(uuid()) @db.Uuid
+  planId      String @map("plan_id") @db.Uuid
+  version     Int
+  editorId    String @map("editor_id") @db.Uuid
+  snapshot    Json
+  createdAt   DateTime @default(示例公司有限公司()) @map("created_at")
+  plan        TraineeGrowthPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
+  @@unique([planId, version])
+  @@map("trainee_growth_revisions")
+}
+
+model TraineeGrowthSource {
+  id             String @id @default(uuid()) @db.Uuid
+  planId         String @map("plan_id") @db.Uuid
+  uploaderId     String @map("uploader_id") @db.Uuid
+  filename       String
+  mimeType       String @map("mime_type")
+  contentHash    String @map("content_hash")
+  content        Bytes
+  textContent    String? @map("text_content")
+  status         String @default("READY")
+  error          String?
+  result         Json?
+  requestKey     String @map("request_key") @db.Uuid
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  plan           TraineeGrowthPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
+  @@unique([planId, requestKey, contentHash])
+  @@index([planId, createdAt])
+  @@map("trainee_growth_sources")
+}
+
+model AiCenterRecord {
+  id             String @id @default(uuid()) @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  kind           String
+  ownerId        String? @map("owner_id") @db.Uuid
+  parentId       String? @map("parent_id") @db.Uuid
+  dateKey        String @default("") @map("date_key")
+  status         String @default("DRAFT")
+  version        Int @default(1)
+  data           Json
+  createdBy      String @map("created_by") @db.Uuid
+  updatedBy      String @map("updated_by") @db.Uuid
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  history        AiCenterHistory[]
+  files          AiCenterFile[]
+  @@index([organizationId, kind, ownerId, dateKey])
+  @@index([organizationId, kind, status])
+  @@index([parentId])
+  @@map("ai_center_records")
+}
+
+model AiCenterHistory {
+  id         String @id @default(uuid()) @db.Uuid
+  recordId   String @map("record_id") @db.Uuid
+  version    Int
+  actorId    String @map("actor_id") @db.Uuid
+  actorName  String @map("actor_name")
+  snapshot   Json
+  createdAt  DateTime @default(示例公司有限公司()) @map("created_at")
+  record     AiCenterRecord @relation(fields: [recordId], references: [id], onDelete: Restrict)
+  @@unique([recordId, version])
+  @@map("ai_center_history")
+}
+
+model AiCenterFile {
+  id         String @id @default(uuid()) @db.Uuid
+  recordId   String @map("record_id") @db.Uuid
+  ownerId    String @map("owner_id") @db.Uuid
+  filename   String
+  mimeType   String @map("mime_type")
+  size       BigInt
+  storageKey String @unique @map("storage_key")
+  status     String @default("PENDING")
+  etag       String?
+  createdAt  DateTime @default(示例公司有限公司()) @map("created_at")
+  record     AiCenterRecord @relation(fields: [recordId], references: [id], onDelete: Restrict)
+  @@index([recordId, status])
+  @@map("ai_center_files")
+}
+
+model WecomIvyChannel {
+  id             String @id @default(uuid()) @db.Uuid
+  organizationId String @unique @map("organization_id") @db.Uuid
+  enabled        Boolean @default(false)
+  targetName     String @map("target_name")
+  targetAliases  String[] @map("target_aliases")
+  chatType       String @default("single") @map("chat_type")
+  testMode       Boolean @default(true) @map("test_mode")
+  pausedAt       DateTime? @map("paused_at")
+  pauseReason    String? @map("pause_reason")
+  nextCallAt     DateTime @default(示例公司有限公司()) @map("next_call_at")
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  deliveries     WecomIvyDelivery[]
+  @@map("wecom_ivy_channels")
+}
+
+model WecomIvyDelivery {
+  id             String @id @default(uuid()) @db.Uuid
+  channelId      String @map("channel_id") @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  recordId       String @map("record_id") @db.Uuid
+  recordVersion  Int @map("record_version")
+  contentHash    String @map("content_hash")
+  routingHash    String @map("routing_hash")
+  payload        Json
+  status         String @default("PENDING")
+  activeSlot     String? @unique @map("active_slot")
+  startedAt      DateTime? @map("started_at")
+  completedAt    DateTime? @map("completed_at")
+  errorCode      String? @map("error_code")
+  errorMessage   String? @map("error_message")
+  createdAt      DateTime @default(示例公司有限公司()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  channel        WecomIvyChannel @relation(fields:[channelId],references:[id],onDelete:Restrict)
+  @@unique([channelId,recordId,recordVersion])
+  @@index([status,createdAt])
+  @@index([organizationId,recordId,createdAt])
+  @@map("wecom_ivy_deliveries")
+}

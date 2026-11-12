@@ -1,0 +1,22 @@
+**/node_modules/
+**/dist/
+**/uploads/
+.env
+.env.*
+!.env.example
+ops/private/
+releases/
+**/__pycache__/
+*.pyc
+
+# Public archive exclusions
+**/private/
+.env
+.env.*
+!.env.example
+*.dump
+*.bundle
+*.xlsx
+*.xls
+*.csv
+*.tar.gz

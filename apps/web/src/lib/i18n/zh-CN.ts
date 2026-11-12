@@ -1,0 +1,2 @@
+export const zhCN = { common: { confirm: '确认', cancel: '取消', loading: '正在加载', retry: '重试', noData: '暂无数据', forbidden: '没有权限执行此操作' }, navigation: { dashboard: '工作台', opportunities: '内部机会', circles: '临时圈子', buffs: 'AI Buff', valueNetwork: '价值流网络' } } as const;
+export function translate(path: string): string { const value = path.split('.').reduce<unknown>((current, key) => current && typeof current === 'object' ? (current as Record<string, unknown>)[key] : undefined, zhCN); return typeof value === 'string' ? value : path; }

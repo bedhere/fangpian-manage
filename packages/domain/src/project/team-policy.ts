@@ -1,0 +1,3 @@
+export type TeamDecision = { allowed: true } | { allowed: false; reason: 'PROJECT_OWNER_ALREADY_ASSIGNED' };
+export const canAssignProjectOwner = (currentOwnerId: string | null, candidateId: string): TeamDecision => currentOwnerId && currentOwnerId !== candidateId ? { allowed: false, reason: 'PROJECT_OWNER_ALREADY_ASSIGNED' } : { allowed: true };
+export const assertContributionTotal = (percentages: readonly number[]): true => { const total = percentages.reduce((sum, value) => sum + value, 0); if (Math.abs(total - 100) > 0.0001) throw new Error('CONTRIBUTION_TOTAL_MUST_EQUAL_100'); return true; };

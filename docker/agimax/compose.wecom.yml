@@ -1,0 +1,13 @@
+# Cloud-only connector. 示例品牌 private runtime files outside the source tree.
+# docker compose --env-file .env -f docker/agimax/compose.yml -f docker/agimax/compose.wecom.yml up -d
+services:
+  api:
+    environment:
+      WECOM_ORGANIZATION_ID: 708c8c27-b56d-4d46-8229-95f1d570472d
+      WECOM_TARGET_URL: https://doc.weixin.qq.com/smartsheet/s3_AUIAugZFAJ0CNujs52RYAQw2pWTTR?tab=q979lj&viewId=v4eLaS
+      WECOM_DOCUMENT_NAME: 副本-吉米的项目进度甘特图
+      WECOM_CLI_BIN: /usr/local/bin/wecom-cli
+      WECOM_CLI_CONFIG_DIR: /home/node/.config/wecom-cli
+    volumes:
+      - /opt/agimax/private/wecom-20261028/bin/wecom-cli:/usr/local/bin/wecom-cli:ro
+      - /opt/agimax/private/wecom-20261028/credentials:/home/node/.config/wecom-cli

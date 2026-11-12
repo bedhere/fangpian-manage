@@ -1,0 +1,4 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { RulesView } from "./rules-view";
+describe("RulesView", () => { it("renders registered typed fields without a raw JSON editor", async () => { sessionStorage.setItem("valueflow_admin_token", "token"); vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce({ ok: true, json: async () => [{ id: "s1", key: "settlement.lockDay", value: 1, version: 1 }] }).mockResolvedValueOnce({ ok: true, json: async () => [{ key: "settlement.lockDay", label: "月结锁定日", group: "settlement", fields: [{ path: "$", label: "每月锁定日", type: "number", min: 1, max: 28 }] }] })); render(<RulesView />); expect(await screen.findByLabelText("每月锁定日")).toHaveAttribute("type", "number"); expect(screen.queryByText(/JSON/)).not.toBeInTheDocument(); }); });

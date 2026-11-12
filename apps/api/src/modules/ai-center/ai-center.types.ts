@@ -1,0 +1,51 @@
+import type { Prisma } from '@value-flow/db';
+import type { LearningRichDocument } from '@value-flow/domain/learning-note';
+import type { RequestUser } from '../auth/auth.types.js';
+export const grades = ['S','A','B','C'] as const;
+export type Grade = typeof grades[number];
+export type Priority = 'P0'|'P1'|'P2'|'P3';
+export type Kind = 'MANAGER'|'MEMBER'|'CALENDAR'|'TASK'|'IVY'|'NOTE'|'LINK'|'APPEAL'|'EXCEPTION';
+export type AiRecord<T = Record<string, unknown>> = Omit<Prisma.AiCenterRecordGetPayload<{}>, 'data'> & { data:T };
+export type AiUser = { id:string; name:string; departmentId:string|null; departmentName:string|null; managerId:string|null; active:boolean; employee:boolean; roles:string[] };
+export type MentorConfiguration = {active:boolean;aiMentorId:string|null;departmentMentorIds:string[]};
+export type MentorRequest = {
+  id:string;status:'PENDING'|'APPROVED'|'REJECTED'|'CANCELLED'|'SUPERSEDED';
+  aiMentorId:string;departmentMentorIds:string[];comment:string;submittedBy:string;submittedAt:string;
+  base:MentorConfiguration;reviewerId?:string;reviewerName?:string;reviewedAt?:string;decisionComment?:string;
+};
+export type MemberData = { active:boolean; sinceDate:string; aiMentorId:string|null; departmentMentorIds:string[]; legacyMentorId?:string|null; originalDepartmentId?:string|null;mentorRequest?:MentorRequest };
+export type Review = { grade:Grade; comment:string; reviewerId:string; reviewerName:string; reviewerRole:string; at:string; reason?:string };
+export type TaskData = {
+  title:string; description:string; acceptanceCriteria:string; priority:Priority;
+  sourceType:'AI'|'IVY'|'LEARNING'|'SELF'; sourceRecordId?:string; sourceEntryId?:string; sourceVersion?:number;
+  acquisitionMode?:'DIRECT'|'CLAIMED';
+  proposalFileIds?:string[];proposedAt?:string;
+  requestKey?:string;creationRequestHash?:string;
+  assigneeId:string|null; targetUserId:string|null; selfDifficulty:Grade|null; confirmedDifficulty:Grade|null;
+  dueAt:string; approvedAt?:string; approvedBy?:string; progress:number;
+  submission?:string; submittedAt?:string; submissionFileIds?:string[]; review?:Review; completionRatio?:number; progressNote?:string;
+  evidence?:{ recordId:string; entryId:string; text:string; reviewedBy?:string }[];
+  milestones?:{ id:string; title:string; weight:number; completed:boolean }[];
+  decisionComment?:string; decisionBy?:string; decisionAt?:string; lastChangeReason?:string; declinedBy?:string[];
+};
+export type IvyEntry = { id:string; text:string; status:'DONE'|'DOING'|'NOT_DONE'; note?:string };
+export type IvyData = { today:IvyEntry[]; tomorrow:IvyEntry[]; review?:Review };
+export type LearningAction = { id:string; title:string; description:string; acceptanceCriteria:string; priority:Priority; dueAt:string; selfDifficulty:Grade };
+export type NoteData = { title:string; content:string; businessLink:string; websites?:string[];contentDocument?:LearningRichDocument;actions:LearningAction[]; review?:Review; firstSubmittedAt?:string; submittedAt?:string; fileIds?:string[]; decisionComment?:string; supersedesId?:string; lateReview?:{countInOriginalWeek:boolean;reviewerId:string;reviewerName:string;at:string;reason:string} };
+export type LinkData = { sourceRecordId:string; sourceEntryId:string; taskId:string; text:string; decisionComment?:string; reviewerId?:string };
+export type CalendarData = { confirmed:boolean; effectiveFrom:string; weekdays:number[]; workStart:string; workEnd:string; breakStart:string; breakEnd:string };
+export type ExceptionData = { dates:string[]; noteQuota:number|null; reason:string; reviewerId:string; reviewerName:string };
+export type AiScope = {
+  actor:RequestUser; self:AiUser; users:Map<string,AiUser>; members:Map<string,AiRecord<MemberData>>;
+  isManager:boolean; isTrainee:boolean; isAiStaff:boolean; isMentor:boolean;
+  canApproveMentors:boolean;mentorApproverAvailable:boolean;
+  user:(id:string)=>AiUser|undefined;
+  canReadOwner:(id:string)=>boolean;
+  canReview:(id:string)=>boolean;
+  reviewerIds:(id:string)=>string[];
+  mentorIds:(id:string)=>string[];
+  canPublish:boolean;
+};
+export type AiContext = { tx:Prisma.TransactionClient; actor:RequestUser; scope:AiScope };
+export type RecordView<T = unknown> = { id:string; kind:string; ownerId:string|null; ownerName:string; dateKey:string; status:string; version:number; data:T; createdAt:string; updatedAt:string; canEdit:boolean; canReview:boolean };
+export function dataOf<T>(row:Omit<AiRecord,'data'> & { data:unknown }):T { return row.data as T; }
